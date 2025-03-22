@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 
 interface ModelViewerProps {
   modelPath: string;
@@ -17,6 +17,8 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
   height = '400px',
   backgroundColor = '#000000',
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -34,46 +36,61 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     sceneRef.current = scene;
     scene.background = new THREE.Color(backgroundColor);
 
-    // Camera setup
+    // Camera setup with mobile optimization
     const camera = new THREE.PerspectiveCamera(
-      60,
+      isMobile ? 70 : 60, // Wider FOV for mobile
       containerRef.current.clientWidth / containerRef.current.clientHeight,
       0.1,
       1000
     );
     cameraRef.current = camera;
-    // Position camera closer at top-right angle
-    camera.position.set(2, 1.5, 2);
+    // Adjust camera position based on device
+    camera.position.set(
+      isMobile ? 2.5 : 2,
+      isMobile ? 2 : 1.5,
+      isMobile ? 2.5 : 2
+    );
 
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // Renderer setup with mobile optimization
+    const renderer = new THREE.WebGLRenderer({
+      antialias: !isMobile, // Disable antialiasing on mobile for better performance
+      powerPreference: "high-performance"
+    });
     rendererRef.current = renderer;
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio);
     containerRef.current.appendChild(renderer.domElement);
 
-    // Controls setup
+    // Controls setup with mobile optimization
     const controls = new OrbitControls(camera, renderer.domElement);
     controlsRef.current = controls;
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.minDistance = 1.5;
-    controls.maxDistance = 4;
-    // Set the target to look at the center
+    controls.dampingFactor = isMobile ? 0.07 : 0.05;
+    controls.minDistance = isMobile ? 2 : 1.5;
+    controls.maxDistance = isMobile ? 5 : 4;
+    controls.enableZoom = true;
+    controls.enablePan = !isMobile; // Disable panning on mobile
+    controls.rotateSpeed = isMobile ? 0.7 : 1; // Slower rotation on mobile for better control
+    controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_ROTATE
+    };
     controls.target.set(0, 0, 0);
-    // Update controls to apply the new target
     controls.update();
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    // Lighting setup with mobile optimization
+    const ambientLight = new THREE.AmbientLight(0xffffff, isMobile ? 0.7 : 0.5);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    // Position the light to match camera angle
-    directionalLight.position.set(2, 1.5, 2);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, isMobile ? 0.8 : 1);
+    directionalLight.position.set(
+      isMobile ? 2.5 : 2,
+      isMobile ? 2 : 1.5,
+      isMobile ? 2.5 : 2
+    );
     scene.add(directionalLight);
 
-    // Load model
+    // Load model with mobile optimization
     const loader = new GLTFLoader();
     loader.load(
       modelPath,
@@ -90,7 +107,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2 / maxDim;
+        const scale = isMobile ? 1.8 / maxDim : 2 / maxDim; // Slightly smaller on mobile
         model.scale.setScalar(scale);
         model.position.sub(center.multiplyScalar(scale));
         
@@ -104,30 +121,45 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
       }
     );
 
-    // Animation loop
-    const animate = () => {
+    // Optimized animation loop
+    let previousTime = 0;
+    const animate = (currentTime: number) => {
       frameIdRef.current = requestAnimationFrame(animate);
+      
+      // Limit to 60fps on mobile
+      if (isMobile && (currentTime - previousTime) < (1000 / 60)) {
+        return;
+      }
+      
+      previousTime = currentTime;
       controls.update();
       renderer.render(scene, camera);
     };
-    animate();
+    animate(0);
 
-    // Window resize handler
+    // Optimized resize handler with debounce
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-      if (!containerRef.current || !camera || !renderer) return;
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      
+      resizeTimeout = setTimeout(() => {
+        if (!containerRef.current || !camera || !renderer) return;
 
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
+        const width = containerRef.current.clientWidth;
+        const height = containerRef.current.clientHeight;
 
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 2) : window.devicePixelRatio);
+      }, 250); // Debounce resize events
     };
 
     window.addEventListener('resize', handleResize);
 
     // Cleanup
     return () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(frameIdRef.current);
       
@@ -147,18 +179,19 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         });
       }
     };
-  }, [modelPath, backgroundColor]);
+  }, [modelPath, backgroundColor, isMobile]);
 
   return (
     <Box
       ref={containerRef}
       sx={{
         width,
-        height,
+        height: isMobile ? '300px' : height, // Smaller height on mobile
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: 2,
-        boxShadow: 3,
+        borderRadius: { xs: 1, sm: 2 }, // Smaller border radius on mobile
+        boxShadow: { xs: 2, sm: 3 }, // Lighter shadow on mobile
+        touchAction: 'none', // Prevent default touch behaviors
       }}
     >
       {isLoading && (
@@ -173,9 +206,13 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 1,
           }}
         >
-          <CircularProgress color="primary" />
+          <CircularProgress 
+            color="primary"
+            size={isMobile ? 40 : 48} // Smaller loading indicator on mobile
+          />
         </Box>
       )}
     </Box>

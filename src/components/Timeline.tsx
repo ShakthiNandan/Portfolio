@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Typography, Paper } from '@mui/material';
+import { Box, Container, Typography, Paper, useTheme, useMediaQuery } from '@mui/material';
 import {
   Timeline as MuiTimeline,
   TimelineItem,
@@ -56,153 +56,203 @@ const timelineEvents: TimelineEvent[] = [
   { year: '2025', title: '360 College Virtual Tour', icon: <ThreeSixtyIcon />, color: '#ff9800' },
 ];
 
-const Timeline: React.FC = () => (
-  <Box component="section" id="timeline" sx={{ py: 6 }}>
-    <Container maxWidth="lg">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Typography
-          variant="h3"
-          component="h2"
-          gutterBottom
+const Timeline: React.FC = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return (
+    <Box 
+      component="section" 
+      id="timeline" 
+      sx={{ 
+        py: { xs: 4, sm: 6 },
+        px: { xs: 1, sm: 2 }
+      }}
+    >
+      <Container maxWidth="lg">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Typography
+            variant="h3"
+            component="h2"
+            gutterBottom
+            sx={{
+              mb: { xs: 3, sm: 4 },
+              fontSize: { xs: '2rem', sm: '3rem' },
+              fontWeight: 700,
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+              textAlign: { xs: 'center', sm: 'left' }
+            }}
+          >
+            Journey
+          </Typography>
+        </motion.div>
+        <MuiTimeline 
+          position={isMobile ? "right" : "alternate"}
           sx={{
-            mb: 4,
-            fontWeight: 700,
-            letterSpacing: 1,
-            textTransform: 'uppercase'
+            p: { xs: 1, sm: 2 },
+            [`& .MuiTimelineItem-root`]: {
+              minHeight: { xs: '70px', sm: '100px' }
+            },
+            [`& .MuiTimelineContent-root`]: {
+              px: { xs: 1, sm: 2 }
+            },
+            [`& .MuiTimelineOppositeContent-root`]: {
+              display: { xs: 'none', sm: 'block' }
+            }
           }}
         >
-          Journey
-        </Typography>
-      </motion.div>
-      <MuiTimeline position="alternate">
-        {timelineEvents.map((event, index) => (
-          <TimelineItem key={index}>
-            <TimelineOppositeContent sx={{ m: 'auto 0' }}>
-              <motion.div
-                initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{
-                  type: "spring",
-                  bounce: 0.3,
-                  duration: 0.8,
-                  delay: 0.2
+          {timelineEvents.map((event, index) => (
+            <TimelineItem key={index}>
+              <TimelineOppositeContent 
+                sx={{ 
+                  m: 'auto 0',
+                  flex: { xs: 0, sm: 1 }
                 }}
               >
-                <Typography
-                  variant="h6"
-                  component="span"
-                  sx={{
-                    color: 'text.secondary',
-                    fontWeight: 500,
-                    letterSpacing: 0.5,
-                    textShadow: (theme) => 
-                      theme.palette.mode === 'dark'
-                        ? '0 0 8px rgba(255,255,255,0.3)'
-                        : '0 0 8px rgba(0,0,0,0.1)',
-                  }}
-                >
-                  {event.year}
-                </Typography>
-              </motion.div>
-            </TimelineOppositeContent>
-            <TimelineSeparator>
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{
-                  type: "spring",
-                  bounce: 0.4,
-                  duration: 0.6,
-                  delay: 0.3
-                }}
-              >
-                <TimelineDot 
-                  sx={{ 
-                    bgcolor: event.color, 
-                    boxShadow: 3,
-                    transition: 'all 0.3s ease-in-out',
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                      boxShadow: 6,
-                    }
-                  }}
-                >
-                  {event.icon}
-                </TimelineDot>
-              </motion.div>
-              {index < timelineEvents.length - 1 && (
                 <motion.div
-                  initial={{ scaleY: 0 }}
-                  whileInView={{ scaleY: 1 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.8 }}
                   transition={{
-                    duration: 0.4,
-                    delay: 0.4
-                  }}
-                  style={{ width: '100%', transformOrigin: 'top' }}
-                >
-                  <TimelineConnector />
-                </motion.div>
-              )}
-            </TimelineSeparator>
-            <TimelineContent sx={{ py: '12px', px: 2 }}>
-              <motion.div
-                initial={{ opacity: 0, x: index % 2 === 0 ? 100 : -100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{
-                  type: "spring",
-                  bounce: 0.3,
-                  duration: 0.8,
-                  delay: 0.2
-                }}
-              >
-                <MotionPaper
-                  elevation={3}
-                  sx={{ 
-                    p: 2, 
-                    bgcolor: 'background.default',
-                    borderLeft: (theme) => `4px solid ${event.color}`,
-                  }}
-                  whileHover={{
-                    scale: 1.02,
-                    boxShadow: "0px 5px 15px rgba(0,0,0,0.2)",
-                  }}
-                  transition={{
                     type: "spring",
-                    stiffness: 300,
-                    damping: 20
+                    bounce: 0.3,
+                    duration: 0.6,
+                    delay: 0.1
                   }}
                 >
                   <Typography
                     variant="h6"
-                    component="h3"
+                    component="span"
                     sx={{
+                      color: 'text.secondary',
                       fontWeight: 500,
                       letterSpacing: 0.5,
-                      background: `linear-gradient(45deg, ${event.color} 30%, ${event.color}90 90%)`,
-                      backgroundClip: 'text',
-                      WebkitBackgroundClip: 'text',
-                      color: 'transparent',
-                      textShadow: '0 0 8px rgba(0,0,0,0.1)',
+                      fontSize: { xs: '0.9rem', sm: '1.25rem' },
+                      textShadow: (theme) => 
+                        theme.palette.mode === 'dark'
+                          ? '0 0 8px rgba(255,255,255,0.3)'
+                          : '0 0 8px rgba(0,0,0,0.1)',
                     }}
                   >
-                    {event.title}
+                    {event.year}
                   </Typography>
-                </MotionPaper>
-              </motion.div>
-            </TimelineContent>
-          </TimelineItem>
-        ))}
-      </MuiTimeline>
-    </Container>
-  </Box>
-);
+                </motion.div>
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true, amount: 0.8 }}
+                  transition={{
+                    type: "spring",
+                    bounce: 0.4,
+                    duration: 0.6,
+                    delay: 0.2
+                  }}
+                >
+                  <TimelineDot 
+                    sx={{ 
+                      bgcolor: event.color,
+                      p: { xs: 1, sm: 2 },
+                      boxShadow: 3,
+                      transition: 'all 0.3s ease-in-out',
+                      '&:hover': {
+                        transform: 'scale(1.1)',
+                        boxShadow: 6,
+                      }
+                    }}
+                  >
+                    {event.icon}
+                  </TimelineDot>
+                </motion.div>
+                {index < timelineEvents.length - 1 && (
+                  <motion.div
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true, amount: 0.8 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.3
+                    }}
+                    style={{ width: '100%', transformOrigin: 'top' }}
+                  >
+                    <TimelineConnector sx={{ minHeight: { xs: 30, sm: 40 } }} />
+                  </motion.div>
+                )}
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: { xs: 1, sm: 2 }, px: { xs: 1, sm: 2 } }}>
+                <motion.div
+                  initial={{ opacity: 0, x: isMobile ? -20 : (index % 2 === 0 ? 50 : -50) }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.8 }}
+                  transition={{
+                    type: "spring",
+                    bounce: 0.3,
+                    duration: 0.6,
+                    delay: 0.2
+                  }}
+                >
+                  <MotionPaper
+                    elevation={3}
+                    sx={{ 
+                      p: { xs: 1.5, sm: 2 },
+                      bgcolor: 'background.default',
+                      borderLeft: (theme) => `4px solid ${event.color}`,
+                      maxWidth: { xs: '100%', sm: '350px' }
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0px 5px 15px rgba(0,0,0,0.2)",
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        fontWeight: 500,
+                        letterSpacing: 0.5,
+                        fontSize: { xs: '0.9rem', sm: '1.25rem' },
+                        background: `linear-gradient(45deg, ${event.color} 30%, ${event.color}90 90%)`,
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        color: 'transparent',
+                        textShadow: '0 0 8px rgba(0,0,0,0.1)',
+                      }}
+                    >
+                      {event.title}
+                    </Typography>
+                    {isMobile && (
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          display: 'block',
+                          mt: 0.5,
+                          color: 'text.secondary',
+                          fontWeight: 500
+                        }}
+                      >
+                        {event.year}
+                      </Typography>
+                    )}
+                  </MotionPaper>
+                </motion.div>
+              </TimelineContent>
+            </TimelineItem>
+          ))}
+        </MuiTimeline>
+      </Container>
+    </Box>
+  );
+};
 
 export default Timeline;
