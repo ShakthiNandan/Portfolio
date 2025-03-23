@@ -143,7 +143,7 @@ const Patents: React.FC = () => {
                             fontWeight: 500,
                           }}
                         >
-                          Patent Date: {patent.date}
+                          Patent Published Date: {patent.date}
                         </Typography>
                       </Box>
                     </Grid>

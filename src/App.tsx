@@ -151,6 +151,9 @@ const App: React.FC = () => {
                     <ProfessionalExperience />
                   </motion.div>
                   <motion.div variants={itemVariants}>
+                    <PositionsOfResponsibility />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
                     <Timeline />
                   </motion.div>
                   <motion.div variants={itemVariants}>
