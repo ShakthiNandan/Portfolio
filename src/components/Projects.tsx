@@ -1,12 +1,11 @@
 import React from 'react';
-import { Box, Typography, Grid, Paper, Link, Chip, useTheme } from '@mui/material';
+import { Box, Typography, Grid, Paper, Link, Chip, useTheme, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CodeIcon from '@mui/icons-material/Code';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import SchoolIcon from '@mui/icons-material/School';
-import ChatIcon from '@mui/icons-material/Chat';
 
 interface Project {
   id: string;
@@ -161,9 +160,21 @@ const projects: Project[] = [
 const Projects: React.FC = () => {
   const theme = useTheme();
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [selectedCategory, setSelectedCategory] = React.useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = React.useState<string>('all');
   const ITEMS_PER_PAGE = 6;
-  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
-  const visibleProjects = projects.slice(
+
+  const categories = ['all', ...new Set(projects.map(project => project.category))];
+  const statuses = ['all', ...new Set(projects.map(project => project.status))];
+
+  const filteredProjects = projects.filter(project => {
+    const categoryMatch = selectedCategory === 'all' || project.category === selectedCategory;
+    const statusMatch = selectedStatus === 'all' || project.status === selectedStatus;
+    return categoryMatch && statusMatch;
+  });
+
+  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
+  const visibleProjects = filteredProjects.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -189,6 +200,62 @@ const Projects: React.FC = () => {
       >
         Projects
       </Typography>
+
+      <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "contained" : "outlined"}
+              onClick={() => {
+                setSelectedCategory(category);
+                setCurrentPage(1);
+              }}
+              sx={{
+                textTransform: 'capitalize',
+                minWidth: 100,
+                background: selectedCategory === category
+                  ? `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`
+                  : 'transparent',
+                '&:hover': {
+                  background: selectedCategory === category
+                    ? `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`
+                    : 'rgba(25, 118, 210, 0.04)',
+                },
+              }}
+            >
+              {category}
+            </Button>
+          ))}
+        </Box>
+
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          {statuses.map((status) => (
+            <Button
+              key={status}
+              variant={selectedStatus === status ? "contained" : "outlined"}
+              onClick={() => {
+                setSelectedStatus(status);
+                setCurrentPage(1);
+              }}
+              sx={{
+                textTransform: 'capitalize',
+                minWidth: 100,
+                background: selectedStatus === status
+                  ? `linear-gradient(45deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`
+                  : 'transparent',
+                '&:hover': {
+                  background: selectedStatus === status
+                    ? `linear-gradient(45deg, ${theme.palette.secondary.dark}, ${theme.palette.primary.dark})`
+                    : 'rgba(25, 118, 210, 0.04)',
+                },
+              }}
+            >
+              {status}
+            </Button>
+          ))}
+        </Box>
+      </Box>
 
       <Grid container spacing={3}>
         {visibleProjects.map((project, index) => (

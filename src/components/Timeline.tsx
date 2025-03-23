@@ -7,7 +7,6 @@ import {
   TimelineConnector,
   TimelineContent,
   TimelineDot,
-  TimelineOppositeContent,
 } from '@mui/lab';
 import { motion } from 'framer-motion';
 import {
@@ -16,15 +15,8 @@ import {
   Cloud as CloudIcon,
   Business as BusinessIcon,
   Chat as ChatIcon,
-  LocalHospital as HospitalIcon,
-  PhoneAndroid as PhoneIcon,
-  Gamepad as GamepadIcon,
   PhoneIphone as MobileIcon,
   Psychology as AIIcon,
-  Agriculture as AgricultureIcon,
-  MusicNote as MusicIcon,
-  HealthAndSafety as HealthIcon,
-  ThreeSixty as ThreeSixtyIcon,
   Brush as BrushIcon,
 } from '@mui/icons-material';
 
@@ -34,26 +26,83 @@ const MotionTimelineDot = motion(TimelineDot);
 interface TimelineEvent {
   year: string;
   title: string;
+  description: string;
   icon: React.ReactNode;
-  color: string;
 }
 
-const timelineEvents: TimelineEvent[] = [
-  { year: '2017', title: 'Blender3D', icon: <BrushIcon />, color: '#ff9800' },
-  { year: '2021', title: 'Python Beginner', icon: <CodeIcon />, color: '#2196f3' },
-  { year: '2022-I', title: 'HTML5 Web Development', icon: <WebIcon />, color: '#e91e63' },
-  { year: '2022-II', title: 'PythonAnywhere Hosting & Godot Development', icon: <CloudIcon />, color: '#4caf50' },
-  { year: '2022-III', title: 'Aalam Dev', icon: <BusinessIcon />, color: '#9c27b0' },
-  { year: '2023-I', title: 'Covid CHATBOT AISHA', icon: <ChatIcon />, color: '#00bcd4' },
-  { year: '2023-II', title: 'USIM Clinical System', icon: <HospitalIcon />, color: '#f44336' },
-  { year: '2023-III', title: 'Samsung Prism', icon: <PhoneIcon />, color: '#3f51b5' },
-  { year: '2023-IV', title: 'IOT Gauntlet', icon: <GamepadIcon />, color: '#ff5722' },
-  { year: '2023-V', title: 'Flutter Development', icon: <MobileIcon />, color: '#2196f3' },
-  { year: '2024-I', title: 'Machine Learning', icon: <AIIcon />, color: '#673ab7' },
-  { year: '2024-II', title: 'Paddy Disease Classifier', icon: <AgricultureIcon />, color: '#4caf50' },
-  { year: '2024-III', title: 'Emotion Detection Song Player', icon: <MusicIcon />, color: '#e91e63' },
-  { year: '2024-IV', title: 'Medme Software', icon: <HealthIcon />, color: '#00bcd4' },
-  { year: '2025', title: '360 College Virtual Tour', icon: <ThreeSixtyIcon />, color: '#ff9800' },
+const events: TimelineEvent[] = [
+  {
+    year: "2025",
+    title: "360 College",
+    description: "Virtual Reality College Tour Project",
+    icon: <CodeIcon />
+  },
+  {
+    year: "2024-II",
+    title: "VR Development",
+    description: "Advanced Virtual Reality Development",
+    icon: <WebIcon />
+  },
+  {
+    year: "2024-I",
+    title: "Machine Learning",
+    description: "Advanced Machine Learning and AI Development",
+    icon: <AIIcon />
+  },
+  {
+    year: "2023-V",
+    title: "Flutter Development",
+    description: "Mobile App Development with Flutter",
+    icon: <MobileIcon />
+  },
+  {
+    year: "2023-IV",
+    title: "Arduino Programming",
+    description: "Embedded Systems and IoT Development",
+    icon: <CloudIcon />
+  },
+  {
+    year: "2023-III",
+    title: "Java Development",
+    description: "Enterprise Java Development",
+    icon: <BusinessIcon />
+  },
+  {
+    year: "2023-II",
+    title: "Python Flask",
+    description: "Web Development with Flask Framework",
+    icon: <ChatIcon />
+  },
+  {
+    year: "2023-I",
+    title: "Python AI Modules",
+    description: "Artificial Intelligence and Machine Learning with Python",
+    icon: <AIIcon />
+  },
+  {
+    year: "2022-II",
+    title: "PythonAnywhere Hosting & Godot Development",
+    description: "Web Hosting and Game Development",
+    icon: <WebIcon />
+  },
+  {
+    year: "2022-I",
+    title: "HTML5 Web Development",
+    description: "Modern Web Development with HTML5",
+    icon: <CodeIcon />
+  },
+  {
+    year: "2021",
+    title: "Python Beginner",
+    description: "Introduction to Python Programming",
+    icon: <AIIcon />
+  },
+  {
+    year: "2017",
+    title: "Blender3D",
+    description: "3D Modeling and Animation",
+    icon: <BrushIcon />
+  }
 ];
 
 const Timeline: React.FC = () => {
@@ -66,7 +115,8 @@ const Timeline: React.FC = () => {
       id="timeline" 
       sx={{ 
         py: { xs: 4, sm: 6 },
-        px: { xs: 1, sm: 2 }
+        px: { xs: 1, sm: 2 },
+        backgroundColor: theme.palette.background.default,
       }}
     >
       <Container maxWidth="lg">
@@ -76,19 +126,27 @@ const Timeline: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <Typography
-            variant="h3"
-            component="h2"
-            gutterBottom
+            variant="h2"
+            align="center"
             sx={{
-              mb: { xs: 3, sm: 4 },
+              mb: 4,
               fontSize: { xs: '2rem', sm: '3rem' },
+              fontFamily: 'Roboto',
               fontWeight: 700,
-              letterSpacing: 1,
-              textTransform: 'uppercase',
-              textAlign: { xs: 'center', sm: 'left' }
+              background: (theme) => 
+                theme.palette.mode === 'dark'
+                  ? 'linear-gradient(45deg, #fff 30%, #888 90%)'
+                  : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              textShadow: (theme) => 
+                theme.palette.mode === 'dark'
+                  ? '0 0 20px rgba(255,255,255,0.3)'
+                  : '0 0 20px rgba(33,150,243,0.3)',
             }}
           >
-            Journey
+            Skill Development
           </Typography>
         </motion.div>
         <MuiTimeline 
@@ -106,145 +164,49 @@ const Timeline: React.FC = () => {
             }
           }}
         >
-          {timelineEvents.map((event, index) => (
-            <TimelineItem key={index}>
-              <TimelineOppositeContent 
-                sx={{ 
-                  m: 'auto 0',
-                  flex: { xs: 0, sm: 1 }
-                }}
-              >
+          {events.map((event, index) => (
+            <TimelineItem key={event.year}>
+              <TimelineSeparator>
+                <TimelineDot color="primary" sx={{ bgcolor: theme.palette.primary.main }}>
+                  {event.icon}
+                </TimelineDot>
+                {index < events.length - 1 && <TimelineConnector />}
+              </TimelineSeparator>
+              <TimelineContent>
                 <motion.div
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  initial={{ opacity: 0, x: isMobile ? 50 : -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.8 }}
-                  transition={{
-                    type: "spring",
-                    bounce: 0.3,
-                    duration: 0.6,
-                    delay: 0.1
-                  }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <Typography
                     variant="h6"
-                    component="span"
                     sx={{
-                      color: 'text.secondary',
-                      fontWeight: 500,
-                      letterSpacing: 0.5,
-                      fontSize: { xs: '0.9rem', sm: '1.25rem' },
-                      textShadow: (theme) => 
-                        theme.palette.mode === 'dark'
-                          ? '0 0 8px rgba(255,255,255,0.3)'
-                          : '0 0 8px rgba(0,0,0,0.1)',
+                      fontFamily: 'Roboto',
+                      fontWeight: 600,
+                      color: theme.palette.primary.main,
                     }}
                   >
                     {event.year}
                   </Typography>
-                </motion.div>
-              </TimelineOppositeContent>
-              <TimelineSeparator>
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true, amount: 0.8 }}
-                  transition={{
-                    type: "spring",
-                    bounce: 0.4,
-                    duration: 0.6,
-                    delay: 0.2
-                  }}
-                >
-                  <TimelineDot 
-                    sx={{ 
-                      bgcolor: event.color,
-                      p: { xs: 1, sm: 2 },
-                      boxShadow: 3,
-                      transition: 'all 0.3s ease-in-out',
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                        boxShadow: 6,
-                      }
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontFamily: 'Roboto',
+                      fontWeight: 500,
+                      color: theme.palette.text.primary,
                     }}
                   >
-                    {event.icon}
-                  </TimelineDot>
-                </motion.div>
-                {index < timelineEvents.length - 1 && (
-                  <motion.div
-                    initial={{ scaleY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    viewport={{ once: true, amount: 0.8 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: 0.3
-                    }}
-                    style={{ width: '100%', transformOrigin: 'top' }}
-                  >
-                    <TimelineConnector sx={{ minHeight: { xs: 30, sm: 40 } }} />
-                  </motion.div>
-                )}
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: { xs: 1, sm: 2 }, px: { xs: 1, sm: 2 } }}>
-                <motion.div
-                  initial={{ opacity: 0, x: isMobile ? -20 : (index % 2 === 0 ? 50 : -50) }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.8 }}
-                  transition={{
-                    type: "spring",
-                    bounce: 0.3,
-                    duration: 0.6,
-                    delay: 0.2
-                  }}
-                >
-                  <MotionPaper
-                    elevation={3}
-                    sx={{ 
-                      p: { xs: 1.5, sm: 2 },
-                      bgcolor: 'background.default',
-                      borderLeft: (theme) => `4px solid ${event.color}`,
-                      maxWidth: { xs: '100%', sm: '350px' }
-                    }}
-                    whileHover={{
-                      scale: 1.02,
-                      boxShadow: "0px 5px 15px rgba(0,0,0,0.2)",
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 20
+                    {event.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: 'Roboto',
+                      color: theme.palette.text.secondary,
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      component="h3"
-                      sx={{
-                        fontWeight: 500,
-                        letterSpacing: 0.5,
-                        fontSize: { xs: '0.9rem', sm: '1.25rem' },
-                        background: `linear-gradient(45deg, ${event.color} 30%, ${event.color}90 90%)`,
-                        backgroundClip: 'text',
-                        WebkitBackgroundClip: 'text',
-                        color: 'transparent',
-                        textShadow: '0 0 8px rgba(0,0,0,0.1)',
-                      }}
-                    >
-                      {event.title}
-                    </Typography>
-                    {isMobile && (
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          display: 'block',
-                          mt: 0.5,
-                          color: 'text.secondary',
-                          fontWeight: 500
-                        }}
-                      >
-                        {event.year}
-                      </Typography>
-                    )}
-                  </MotionPaper>
+                    {event.description}
+                  </Typography>
                 </motion.div>
               </TimelineContent>
             </TimelineItem>

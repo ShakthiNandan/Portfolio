@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider, CssBaseline, Container, Typography, Box, IconButton, useMediaQuery } from '@mui/material';
+import { ThemeProvider, CssBaseline, Container, Typography, Box, useMediaQuery } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
@@ -17,6 +17,9 @@ import GodotShowcase from './components/GodotShowcase';
 import Layout from './components/Layout';
 import getTheme from './theme';
 import EmailSender from './components/EmailSender';
+import ProfessionalExperience from './components/ProfessionalExperience';
+import PositionsOfResponsibility from './components/PositionsOfResponsibility';
+import NavigationShortcuts from './components/NavigationShortcuts';
 
 const letterAnimation = {
   hidden: { opacity: 0, y: 50 },
@@ -29,18 +32,6 @@ const letterAnimation = {
       ease: [0.2, 0.65, 0.3, 0.9],
     },
   }),
-};
-
-const titleAnimation = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.2, 0.65, 0.3, 0.9],
-    },
-  },
 };
 
 const AnimatedTitle: React.FC<{ text: string; variant: "h2" | "h3"; component?: React.ElementType; gutterBottom?: boolean; align?: "center" | "left" | "right" }> = ({
@@ -128,23 +119,8 @@ const App: React.FC = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout>
-          <IconButton
-            onClick={toggleColorMode}
-            sx={{
-              position: 'fixed',
-              right: 20,
-              bottom: 20,
-              backgroundColor: 'background.paper',
-              boxShadow: 3,
-              zIndex: 1000,
-              '&:hover': {
-                backgroundColor: 'action.hover',
-              },
-            }}
-          >
-            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-          </IconButton>
+        <Layout toggleTheme={toggleColorMode}>
+          <NavigationShortcuts />
           <AnimatePresence mode="wait">
             <motion.div
               key="container"
@@ -172,10 +148,22 @@ const App: React.FC = () => {
                     <AboutMe />
                   </motion.div>
                   <motion.div variants={itemVariants}>
+                    <ProfessionalExperience />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
                     <Timeline />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <Skills />
                   </motion.div>
                   <motion.div variants={itemVariants} id="projects">
                     <Projects />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <Certifications />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <Patents />
                   </motion.div>
                   
                   {/* 3D Models Section */}
@@ -220,24 +208,11 @@ const App: React.FC = () => {
                     <CurrentlyWorkingOn />
                   </motion.div>
                   <motion.div variants={itemVariants}>
-                    <Certifications />
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <Skills />
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <Patents />
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
                     <Box sx={{ mt: 4 }}>
                       <Chatbot />
                     </Box>
                   </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                  >
+                  <motion.div variants={itemVariants}>
                     <EmailSender />
                   </motion.div>
                 </Box>
