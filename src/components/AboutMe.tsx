@@ -7,6 +7,7 @@ import {
   Stack,
   IconButton,
   useTheme,
+  Button,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import {
@@ -16,6 +17,8 @@ import {
   School as SchoolIcon,
   LocationOn as LocationIcon,
   Cake as CakeIcon,
+  PictureAsPdf as PictureAsPdfIcon,
+  Download as DownloadIcon,
 } from '@mui/icons-material';
 
 const InfoItem: React.FC<{ icon: React.ReactNode; text: string }> = ({ icon, text }) => (
@@ -72,17 +75,20 @@ const AboutMe: React.FC = () => {
                   ? '0 0 20px rgba(255,255,255,0.3)'
                   : '0 0 20px rgba(33,150,243,0.3)',
                 mb: 3,
+                textAlign: 'center',
+                fontSize: { xs: '2.5rem', sm: '3.5rem' },
+                letterSpacing: 2,
               }}
             >
-              About Me
+              NANDAN'S PRISM
             </Typography>
 
             <Stack spacing={3}>
               <Box>
-                <Typography variant="h4" gutterBottom color="primary">
-                  Shakthi Nandan
+                <Typography variant="h4" gutterBottom color="primary" sx={{ textAlign: 'center' }}>
+                  About Me
                 </Typography>
-                <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+                <Typography variant="subtitle1" color="text.secondary" gutterBottom sx={{ textAlign: 'center' }}>
                   B.Tech AI & Data Science Student
                 </Typography>
               </Box>
@@ -127,6 +133,39 @@ const AboutMe: React.FC = () => {
                 >
                   <LinkedInIcon fontSize="large" />
                 </IconButton>
+              </Box>
+
+              <Box>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Resume
+                </Typography>
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    href="/data/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    startIcon={<PictureAsPdfIcon />}
+                    sx={{
+                      background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+                      '&:hover': {
+                        background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.secondary.dark} 90%)`,
+                      },
+                    }}
+                  >
+                    View Resume
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    href="/data/resume.pdf"
+                    download
+                    startIcon={<DownloadIcon />}
+                  >
+                    Download Resume
+                  </Button>
+                </Stack>
               </Box>
 
               <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.6 }}>

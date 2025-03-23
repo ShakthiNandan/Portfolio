@@ -12,12 +12,18 @@ import {
   Box,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, DarkMode, LightMode } from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavItem {
   text: string;
   sectionId: string;
+}
+
+interface NavbarProps {
+  toggleTheme: () => void;
 }
 
 const menuItems: NavItem[] = [
@@ -28,10 +34,11 @@ const menuItems: NavItem[] = [
   { text: 'Patents', sectionId: 'patents' },
 ];
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isDarkMode = theme.palette.mode === 'dark';
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -57,25 +64,49 @@ const Navbar: React.FC = () => {
   const drawer = (
     <List>
       {menuItems.map((item) => (
-        <ListItem 
+        <motion.div
           key={item.text}
-          onClick={() => scrollToSection(item.sectionId)}
-          sx={{ 
-            cursor: 'pointer',
-            '&:hover': {
-              background: 'linear-gradient(45deg, rgba(25, 118, 210, 0.1), rgba(156, 39, 176, 0.1))',
-            }
-          }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <ListItemText primary={item.text} />
-        </ListItem>
+          <ListItem 
+            onClick={() => scrollToSection(item.sectionId)}
+            sx={{ 
+              cursor: 'pointer',
+              '&:hover': {
+                background: 'linear-gradient(45deg, rgba(25, 118, 210, 0.1), rgba(156, 39, 176, 0.1))',
+              }
+            }}
+          >
+            <ListItemText primary={item.text} />
+          </ListItem>
+        </motion.div>
       ))}
+      <ListItem>
+        <IconButton onClick={toggleTheme} color="inherit">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={isDarkMode ? 'dark' : 'light'}
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {isDarkMode ? <DarkMode /> : <LightMode />}
+            </motion.div>
+          </AnimatePresence>
+        </IconButton>
+      </ListItem>
     </List>
   );
 
   return (
     <>
       <AppBar 
+        component={motion.div}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
         position="sticky" 
         elevation={0}
         sx={{
@@ -101,7 +132,7 @@ const Navbar: React.FC = () => {
         <Toolbar>
           {isMobile && (
             <IconButton
-              color="inherit"
+              color="primary"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
@@ -110,69 +141,104 @@ const Navbar: React.FC = () => {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography
-            variant="h6"
-            component="div"
-            onClick={() => scrollToSection('home')}
-            sx={{
-              flexGrow: 1,
-              cursor: 'pointer',
-              fontWeight: 700,
-              background: 'linear-gradient(45deg, #1976d2, #9c27b0)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              textShadow: '0 0 20px rgba(25, 118, 210, 0.3)',
-              letterSpacing: '0.05em',
-            }}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{ flexGrow: 1 }}
           >
-            Nandan's Prism
-          </Typography>
+            <Typography
+              variant="h6"
+              component="div"
+              onClick={() => scrollToSection('home')}
+              sx={{
+                cursor: 'pointer',
+                fontWeight: 700,
+                background: 'linear-gradient(45deg, #1976d2, #9c27b0)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                textShadow: '0 0 20px rgba(25, 118, 210, 0.3)',
+                letterSpacing: '0.05em',
+                display: 'inline-block',
+              }}
+            >
+              Nandan's Prism
+            </Typography>
+          </motion.div>
           {!isMobile && (
-            <Box sx={{ display: 'flex', gap: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
               {menuItems.map((item) => (
-                <Button
+                <motion.div
                   key={item.text}
-                  color="inherit"
-                  onClick={() => scrollToSection(item.sectionId)}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ y: 0 }}
+                >
+                  <Button
+                    color="primary"
+                    onClick={() => scrollToSection(item.sectionId)}
+                    sx={{
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: -100,
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                        transition: 'transform 0.3s ease',
+                        transform: 'translateX(-100%)',
+                      },
+                      '&:hover::before': {
+                        transform: 'translateX(200%)',
+                      },
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '2px',
+                        background: 'linear-gradient(90deg, #1976d2, #9c27b0)',
+                        transform: 'scaleX(0)',
+                        transition: 'transform 0.3s ease',
+                        transformOrigin: 'right',
+                      },
+                      '&:hover::after': {
+                        transform: 'scaleX(1)',
+                        transformOrigin: 'left',
+                      },
+                    }}
+                  >
+                    {item.text}
+                  </Button>
+                </motion.div>
+              ))}
+              <Tooltip title={`Switch to ${isDarkMode ? 'Light' : 'Dark'} Mode`}>
+                <IconButton 
+                  onClick={toggleTheme} 
+                  color="primary"
                   sx={{
-                    position: 'relative',
-                    overflow: 'hidden',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: -100,
-                      width: '100%',
-                      height: '100%',
-                      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-                      transition: 'transform 0.3s ease',
-                      transform: 'translateX(-100%)',
-                    },
-                    '&:hover::before': {
-                      transform: 'translateX(200%)',
-                    },
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '2px',
-                      background: 'linear-gradient(90deg, #1976d2, #9c27b0)',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.3s ease',
-                      transformOrigin: 'right',
-                    },
-                    '&:hover::after': {
-                      transform: 'scaleX(1)',
-                      transformOrigin: 'left',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'rotate(180deg)',
                     },
                   }}
                 >
-                  {item.text}
-                </Button>
-              ))}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isDarkMode ? 'dark' : 'light'}
+                      initial={{ rotate: -180, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 180, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {isDarkMode ? <DarkMode /> : <LightMode />}
+                    </motion.div>
+                  </AnimatePresence>
+                </IconButton>
+              </Tooltip>
             </Box>
           )}
         </Toolbar>
