@@ -1,255 +1,338 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Stack,
-  Chip,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@mui/material';
-import { Launch as LaunchIcon, NavigateNext as NextIcon, NavigateBefore as PrevIcon } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
-import useScrollAnimation from '../hooks/useScrollAnimation';
-import { projects, Project } from '../data/projects';
-import ModelViewer from './ModelViewer';
-import GodotPlayer from './GodotPlayer';
+import React from 'react';
+import { Box, Typography, Grid, Paper, Link, Chip, useTheme } from '@mui/material';
+import { motion } from 'framer-motion';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CodeIcon from '@mui/icons-material/Code';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import SchoolIcon from '@mui/icons-material/School';
+import ChatIcon from '@mui/icons-material/Chat';
 
-const ITEMS_PER_PAGE = 6;
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  githubUrl: string;
+  demoUrl?: string;
+  technologies: string[];
+  icon: React.ReactNode;
+  status: 'Completed' | 'In Progress';
+  category: string;
+  demoPath?: string;
+  link?: string;
+  type?: string;
+}
 
-const MotionCard = motion(Card);
-
-const categories = [
-  'All',
-  'Healthcare',
-  'AI/ML',
-  'Web Development',
-  'Mobile',
-  'Cybersecurity',
-  'AR/VR'
-] as const;
+const projects: Project[] = [
+  {
+    id: '1',
+    title: "USIM Clinical System",
+    description: "Medical records management with QR-based access to securely retrieve patient data.",
+    githubUrl: "https://github.com/ShakthiNandan/USIM-Clinical-System",
+    technologies: ["Java", "Spring Boot", "PostgreSQL"],
+    icon: <MedicalServicesIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Healthcare',
+    type: 'Web Development'
+  },
+  {
+    id: '2',
+    title: "Typing Test App",
+    description: "An interactive speed tester for measuring typing speed and accuracy, built with Flask.",
+    githubUrl: "https://github.com/ShakthiNandan/Typing-Test-App",
+    technologies: ["Flask", "JavaScript", "HTML", "CSS"],
+    icon: <CodeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Web Development',
+    type: 'Web Application'
+  },
+  {
+    id: '3',
+    title: "AR-Based Home Decor Project",
+    description: "Enables vendors to upload their products while allowing customers to visualize items in their own space using augmented reality.",
+    githubUrl: "https://github.com/ShakthiNandan/AR-Home-Decor",
+    technologies: ["AR.js", "JavaScript", "HTML", "CSS"],
+    icon: <SchoolIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'AR/VR',
+    type: 'Augmented Reality'
+  },
+  {
+    id: '4',
+    title: "Student Attendance Tracker App",
+    description: "Simplifies attendance tracking for educational institutions, developed using Flutter and Firebase.",
+    githubUrl: "https://github.com/ShakthiNandan/Student-Attendance-Tracker",
+    technologies: ["Flutter", "Firebase"],
+    icon: <SchoolIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Mobile Development',
+    type: 'Mobile Application'
+  },
+  {
+    id: '5',
+    title: "Java File Metadata Extractor",
+    description: "Analyzes file metadata to help identify potential malware, leveraging Java for feature extraction and analysis.",
+    githubUrl: "https://github.com/ShakthiNandan/Java-Metadata-Extractor",
+    technologies: ["Java"],
+    icon: <CodeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Security',
+    type: 'Java Application'
+  },
+  {
+    id: '6',
+    title: "Swifties Webpage",
+    description: "A multimedia fan page dedicated to Taylor Swift, showcasing various forms of media and content related to the artist.",
+    githubUrl: "https://github.com/ShakthiNandan/Swifties-Webpage",
+    technologies: ["HTML", "CSS", "JavaScript"],
+    icon: <SchoolIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Web Development',
+    type: 'Web Application'
+  },
+  {
+    id: '7',
+    title: "Forum Website",
+    description: "Provides a platform for users to register, list projects, and collaborate, built with React, TypeScript, Node.js, Express.js, and PostgreSQL.",
+    githubUrl: "https://github.com/ShakthiNandan/Forum-Website",
+    technologies: ["React", "TypeScript", "Node.js", "Express.js", "PostgreSQL"],
+    icon: <CodeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Web Development',
+    type: 'Full-Stack Application'
+  },
+  {
+    id: '8',
+    title: "MEDME: Resuscitation Room Support Software",
+    description: "Designed to digitize and manage patient vitals and health records in a clinical setting, transitioning from Python Flask to TypeScript with PostgreSQL.",
+    githubUrl: "https://github.com/ShakthiNandan/MEDME-Software",
+    technologies: ["TypeScript", "PostgreSQL"],
+    icon: <MedicalServicesIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'In Progress',
+    category: 'Healthcare',
+    type: 'Web Development'
+  },
+  {
+    id: '9',
+    title: "On-Device Malware Detection (Samsung Prism)",
+    description: "Android app developed in Java that integrates a TensorFlow model for real-time malware detection.",
+    githubUrl: "https://github.com/ShakthiNandan/On-Device-Malware-Detection",
+    technologies: ["Java", "TensorFlow", "Android"],
+    icon: <CodeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'Security',
+    type: 'Android Application'
+  },
+  {
+    id: '10',
+    title: "Paddy Disease Classification",
+    description: "Classifies up to 10 different paddy diseases using deep learning with TensorFlow.",
+    githubUrl: "https://github.com/ShakthiNandan/Paddy-Disease-Classification",
+    technologies: ["TensorFlow", "Python"],
+    icon: <SchoolIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'Completed',
+    category: 'AI/ML',
+    type: 'Machine Learning'
+  },
+  {
+    id: '11',
+    title: "Webcam-Based Eye Tracker",
+    description: "Currently In Progress, aims to track eye movements using a webcam for accessibility or user interaction improvements.",
+    githubUrl: "https://github.com/ShakthiNandan/Webcam-Eye-Tracker",
+    technologies: ["Python", "OpenCV"],
+    icon: <SchoolIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'In Progress',
+    category: 'AI/ML',
+    type: 'Machine Learning'
+  },
+  {
+    id: '12',
+    title: "AI-Based Cybersecurity Initiatives",
+    description: "Includes projects for malicious APK/ZIP detection, stock price forecasting, and healthcare AI for seizure prediction.",
+    githubUrl: "https://github.com/ShakthiNandan/Cybersecurity-Initiatives",
+    technologies: ["Python", "Machine Learning"],
+    icon: <CodeIcon sx={{ fontSize: 40, color: 'primary.main' }} />,
+    status: 'In Progress',
+    category: 'Security',
+    type: 'AI/ML'
+  }
+];
 
 const Projects: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const { ref, isInView } = useScrollAnimation();
-
-  const filteredProjects = projects.filter(project => 
-    selectedCategory === 'All' || project.category === selectedCategory
+  const theme = useTheme();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const ITEMS_PER_PAGE = 6;
+  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
+  const visibleProjects = projects.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
-  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
-  const startIndex = currentPage * ITEMS_PER_PAGE;
-  const visibleProjects = filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-  const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1));
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 0));
-  };
-
-  const handleCategoryChange = (
-    _event: React.MouseEvent<HTMLElement>,
-    newCategory: string,
-  ) => {
-    if (newCategory !== null) {
-      setSelectedCategory(newCategory);
-      setCurrentPage(0);
-    }
-  };
-
-  const renderDemo = (project: Project) => {
-    if (!project.demoPath) return null;
-
-    if (project.type === '3D_MODEL') {
-      return (
-        <ModelViewer
-          modelPath={project.demoPath}
-          width="100%"
-          height={300}
-        />
-      );
-    }
-
-    if (project.type === 'GODOT_GAME') {
-      return (
-        <GodotPlayer
-          htmlPath={project.demoPath}
-          width="100%"
-          height={400}
-        />
-      );
-    }
-
-    return null;
-  };
-
   return (
-    <Box component="section" id="projects" sx={{ py: 6 }}>
-      <Container maxWidth="lg">
-        <Typography
-          variant="h3"
-          component="h2"
-          gutterBottom
-          sx={{ mb: 4 }}
-          fontFamily="Share Tech Mono"
-        >
-          Projects
-        </Typography>
+    <Box component="section" id="projects" sx={{ py: { xs: 4, sm: 6 } }}>
+      <Typography
+        variant="h3"
+        component="h2"
+        gutterBottom
+        sx={{
+          mb: { xs: 3, sm: 4 },
+          fontSize: { xs: '2rem', sm: '3rem' },
+          fontWeight: 700,
+          letterSpacing: 1,
+          textTransform: 'uppercase',
+          textAlign: { xs: 'center', sm: 'left' },
+          color: 'text.primary',
+          textShadow: theme.palette.mode === 'dark'
+            ? '0 0 20px rgba(255,255,255,0.3)'
+            : '0 0 20px rgba(0,0,0,0.1)',
+        }}
+      >
+        Projects
+      </Typography>
 
-        <Box sx={{ mb: 4, overflowX: 'auto' }}>
-          <ToggleButtonGroup
-            value={selectedCategory}
-            exclusive
-            onChange={handleCategoryChange}
-            aria-label="project category"
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 1,
-              '& .MuiToggleButton-root': {
-                border: 'none',
-                borderRadius: '16px !important',
-                px: 2,
-                py: 1,
-              },
-            }}
-          >
-            {categories.map((category) => (
-              <ToggleButton
-                key={category}
-                value={category}
+      <Grid container spacing={3}>
+        {visibleProjects.map((project, index) => (
+          <Grid item xs={12} md={6} key={project.id}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Paper
+                elevation={3}
                 sx={{
-                  '&.Mui-selected': {
-                    backgroundColor: 'primary.main',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'primary.dark',
-                    },
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: theme.palette.mode === 'dark'
+                    ? 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)'
+                    : 'linear-gradient(145deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.01) 100%)',
+                  transition: 'transform 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
                   },
                 }}
               >
-                {category}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-        </Box>
-
-        <Box ref={ref}>
-          <AnimatePresence mode="wait">
-            <Grid container spacing={3}>
-              {visibleProjects.map((project, index) => (
-                <Grid item xs={12} sm={6} md={4} key={`${currentPage}-${project.id}`}>
-                  <MotionCard
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{
-                      duration: 0.5,
-                      delay: index * 0.1,
-                      ease: [0.2, 0.65, 0.3, 0.9],
-                    }}
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Box sx={{ mr: 2 }}>
+                    {project.icon}
+                  </Box>
+                  <Typography
+                    variant="h5"
+                    component="h3"
                     sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}
-                    whileHover={{
-                      y: -8,
-                      boxShadow: "0px 8px 20px rgba(0,0,0,0.2)",
-                      transition: { duration: 0.2 },
+                      fontWeight: 600,
+                      color: 'text.primary',
                     }}
                   >
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-                        <Chip
-                          label={project.status}
-                          color={project.status === 'Completed' ? 'success' : 'warning'}
-                          size="small"
-                        />
-                        <Chip
-                          label={project.category}
-                          color="primary"
-                          size="small"
-                        />
-                      </Stack>
-                      <Typography variant="h5" component="h3" gutterBottom fontFamily="Share Tech Mono">
-                        {project.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        {project.description}
-                      </Typography>
-                      <Box sx={{ mt: 2 }}>
-                        {project.technologies.map((tech) => (
-                          <Chip
-                            key={tech}
-                            label={tech}
-                            size="small"
-                            sx={{ m: 0.5 }}
-                          />
-                        ))}
-                      </Box>
-                      {project.demoPath && (
-                        <Box sx={{ mt: 2 }}>
-                          {renderDemo(project)}
-                        </Box>
-                      )}
-                    </CardContent>
-                    {project.link && (
-                      <CardActions>
-                        <Button
-                          size="small"
-                          color="primary"
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          endIcon={<LaunchIcon />}
-                        >
-                          Learn More
-                        </Button>
-                      </CardActions>
-                    )}
-                  </MotionCard>
-                </Grid>
-              ))}
-            </Grid>
-          </AnimatePresence>
+                    {project.title}
+                  </Typography>
+                </Box>
+
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  {project.description}
+                </Typography>
+
+                <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {project.technologies.map((tech, techIndex) => (
+                    <Chip
+                      key={techIndex}
+                      label={tech}
+                      size="small"
+                      sx={{
+                        backgroundColor: theme.palette.mode === 'dark'
+                          ? 'rgba(255,255,255,0.1)'
+                          : 'rgba(0,0,0,0.05)',
+                        color: 'text.primary',
+                        '&:hover': {
+                          backgroundColor: theme.palette.mode === 'dark'
+                            ? 'rgba(255,255,255,0.15)'
+                            : 'rgba(0,0,0,0.1)',
+                        },
+                      }}
+                    />
+                  ))}
+                </Box>
+
+                <Box sx={{ mt: 'auto', display: 'flex', gap: 2 }}>
+                  <Link
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: 'primary.main',
+                      textDecoration: 'none',
+                      '&:hover': {
+                        textDecoration: 'underline',
+                      },
+                    }}
+                  >
+                    <GitHubIcon sx={{ mr: 1 }} />
+                    View Code
+                  </Link>
+                  {project.demoUrl && (
+                    <Link
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': {
+                          textDecoration: 'underline',
+                        },
+                      }}
+                    >
+                      <VisibilityIcon sx={{ mr: 1 }} />
+                      Live Demo
+                    </Link>
+                  )}
+                </Box>
+              </Paper>
+            </motion.div>
+          </Grid>
+        ))}
+      </Grid>
+
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Chip
+                key={page}
+                label={page}
+                onClick={() => setCurrentPage(page)}
+                sx={{
+                  backgroundColor: currentPage === page
+                    ? 'primary.main'
+                    : theme.palette.mode === 'dark'
+                      ? 'rgba(255,255,255,0.1)'
+                      : 'rgba(0,0,0,0.05)',
+                  color: currentPage === page
+                    ? 'background.paper'
+                    : 'text.primary',
+                  '&:hover': {
+                    backgroundColor: currentPage === page
+                      ? 'primary.dark'
+                      : theme.palette.mode === 'dark'
+                        ? 'rgba(255,255,255,0.15)'
+                        : 'rgba(0,0,0,0.1)',
+                  },
+                }}
+              />
+            ))}
+          </Box>
         </Box>
-        {totalPages > 1 && (
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-            sx={{ mt: 4 }}
-          >
-            <Button
-              variant="contained"
-              startIcon={<PrevIcon />}
-              onClick={handlePrevPage}
-              disabled={currentPage === 0}
-            >
-              Previous
-            </Button>
-            <Typography variant="body1" sx={{ alignSelf: 'center' }}>
-              Page {currentPage + 1} of {totalPages}
-            </Typography>
-            <Button
-              variant="contained"
-              endIcon={<NextIcon />}
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages - 1}
-            >
-              Next
-            </Button>
-          </Stack>
-        )}
-      </Container>
+      )}
     </Box>
   );
 };

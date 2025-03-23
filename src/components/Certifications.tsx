@@ -1,165 +1,156 @@
 import React from 'react';
-import { Box, Container, Typography, Grid, Paper } from '@mui/material';
+import { Box, Typography, Grid, Paper, Link, useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
-import {
-  DataObject as DataIcon,
-  Storage as DatabaseIcon,
-  Code as PythonIcon,
-  Javascript as JavascriptIcon,
-} from '@mui/icons-material';
+import SchoolIcon from '@mui/icons-material/School';
+import CodeIcon from '@mui/icons-material/Code';
+import DataObjectIcon from '@mui/icons-material/DataObject';
+import StorageIcon from '@mui/icons-material/Storage';
 
-interface Certificate {
-  id: string;
+interface Certification {
   title: string;
   issuer: string;
+  date: string;
+  url: string;
   icon: React.ReactNode;
-  color: string;
 }
 
-const certificates: Certificate[] = [
+const certifications: Certification[] = [
   {
-    id: '1',
-    title: 'Python for Data Science',
-    issuer: 'IBM',
-    icon: <DataIcon fontSize="large" />,
-    color: '#0043CE', // IBM Blue
+    title: "Python (Basic)",
+    issuer: "HackerRank",
+    date: "2024",
+    url: "https://www.hackerrank.com/certificates/iframe/f1ad679250f7",
+    icon: <CodeIcon sx={{ fontSize: 40, color: 'primary.main' }} />
   },
   {
-    id: '2',
-    title: 'SQL Basic',
-    issuer: 'HackerRank',
-    icon: <DatabaseIcon fontSize="large" />,
-    color: '#00EA64', // HackerRank Green
+    title: "SQL (Basic)",
+    issuer: "HackerRank",
+    date: "2024",
+    url: "https://www.hackerrank.com/certificates/iframe/6c3dc1092710",
+    icon: <StorageIcon sx={{ fontSize: 40, color: 'primary.main' }} />
   },
   {
-    id: '3',
-    title: 'Python Basic',
-    issuer: 'HackerRank',
-    icon: <PythonIcon fontSize="large" />,
-    color: '#00EA64', // HackerRank Green
+    title: "JavaScript Algorithms and Data Structures",
+    issuer: "freeCodeCamp",
+    date: "2024",
+    url: "https://www.freecodecamp.org/certification/ShakthiNandan/javascript-algorithms-and-data-structures",
+    icon: <DataObjectIcon sx={{ fontSize: 40, color: 'primary.main' }} />
   },
   {
-    id: '4',
-    title: 'JavaScript',
-    issuer: 'freeCodeCamp',
-    icon: <JavascriptIcon fontSize="large" />,
-    color: '#0A0A23', // freeCodeCamp Dark Blue
+    title: "Python 101 for Data Science",
+    issuer: "IBM (Cognitive Class)",
+    date: "August 21, 2023",
+    url: "https://courses.cognitiveclass.ai/certificates/81e93610a7d04023b5853d93a4b81f87",
+    icon: <SchoolIcon sx={{ fontSize: 40, color: 'primary.main' }} />
   },
+  {
+    title: "SQL and Relational Databases 101",
+    issuer: "IBM (Cognitive Class)",
+    date: "April 15, 2024",
+    url: "https://courses.cognitiveclass.ai/certificates/8098b693f5bf41909aa9eb9d1e94571e",
+    icon: <StorageIcon sx={{ fontSize: 40, color: 'primary.main' }} />
+  }
 ];
 
 const Certifications: React.FC = () => {
+  const theme = useTheme();
+
   return (
-    <Box component="section" id="certifications" sx={{ py: 6 }}>
-      <Container maxWidth="lg">
-        <Typography
-          variant="h3"
-          component="h2"
-          gutterBottom
-          sx={{
-            mb: 4,
-            background: (theme) => 
-              theme.palette.mode === 'dark'
-                ? 'linear-gradient(45deg, #fff 30%, #888 90%)'
-                : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            color: 'transparent',
-            textShadow: (theme) => 
-              theme.palette.mode === 'dark'
-                ? '0 0 20px rgba(255,255,255,0.3)'
-                : '0 0 20px rgba(33,150,243,0.3)',
-          }}
-        >
-          Certifications
-        </Typography>
-        <Grid container spacing={3}>
-          {certificates.map((cert) => (
-            <Grid item xs={12} sm={6} md={3} key={cert.id}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5 }}
+    <Box component="section" id="certifications" sx={{ py: { xs: 4, sm: 6 } }}>
+      <Typography
+        variant="h3"
+        component="h2"
+        gutterBottom
+        sx={{
+          mb: { xs: 3, sm: 4 },
+          fontSize: { xs: '2rem', sm: '3rem' },
+          fontWeight: 700,
+          letterSpacing: 1,
+          textTransform: 'uppercase',
+          textAlign: { xs: 'center', sm: 'left' },
+          color: 'text.primary',
+          textShadow: theme.palette.mode === 'dark'
+            ? '0 0 20px rgba(255,255,255,0.3)'
+            : '0 0 20px rgba(0,0,0,0.1)',
+        }}
+      >
+        Certifications
+      </Typography>
+
+      <Grid container spacing={3}>
+        {certifications.map((cert, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  background: theme.palette.mode === 'dark'
+                    ? 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)'
+                    : 'linear-gradient(145deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.01) 100%)',
+                  transition: 'transform 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                  },
+                }}
               >
-                <Paper
-                  elevation={3}
+                <Box sx={{ mb: 2 }}>
+                  {cert.icon}
+                </Box>
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  gutterBottom
                   sx={{
-                    p: 3,
-                    height: '100%',
-                    backgroundColor: 'background.paper',
-                    transition: 'all 0.3s ease-in-out',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
+                    fontWeight: 600,
+                    color: 'text.primary',
+                  }}
+                >
+                  {cert.title}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  {cert.issuer}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  {cert.date}
+                </Typography>
+                <Link
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    mt: 'auto',
+                    color: 'primary.main',
+                    textDecoration: 'none',
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: (theme) => `0 8px 24px ${
-                        theme.palette.mode === 'dark' 
-                          ? 'rgba(255,255,255,0.1)' 
-                          : 'rgba(0,0,0,0.1)'
-                      }`,
-                    },
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '4px',
-                      background: (theme) =>
-                        `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                      textDecoration: 'underline',
                     },
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: 80,
-                      height: 80,
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      mb: 2,
-                      background: (theme) =>
-                        theme.palette.mode === 'dark'
-                          ? `linear-gradient(45deg, ${cert.color}88, ${cert.color}44)`
-                          : `linear-gradient(45deg, ${cert.color}, ${cert.color}88)`,
-                      color: 'white',
-                      boxShadow: `0 4px 20px ${cert.color}33`,
-                    }}
-                  >
-                    {cert.icon}
-                  </Box>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    sx={{
-                      fontWeight: 600,
-                      color: 'primary.main',
-                      mb: 1,
-                    }}
-                  >
-                    {cert.title}
-                  </Typography>
-                  <Typography
-                    variant="subtitle2"
-                    sx={{
-                      color: 'secondary.main',
-                      fontWeight: 500,
-                      mt: 'auto',
-                    }}
-                  >
-                    Issued by {cert.issuer}
-                  </Typography>
-                </Paper>
-              </motion.div>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
+                  View Certificate
+                </Link>
+              </Paper>
+            </motion.div>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };

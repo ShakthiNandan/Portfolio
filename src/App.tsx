@@ -16,6 +16,7 @@ import BlenderShowcase from './components/BlenderShowcase';
 import GodotShowcase from './components/GodotShowcase';
 import Layout from './components/Layout';
 import getTheme from './theme';
+import EmailSender from './components/EmailSender';
 
 const letterAnimation = {
   hidden: { opacity: 0, y: 50 },
@@ -231,6 +232,13 @@ const App: React.FC = () => {
                     <Box sx={{ mt: 4 }}>
                       <Chatbot />
                     </Box>
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <EmailSender />
                   </motion.div>
                 </Box>
               </Container>
