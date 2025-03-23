@@ -5,8 +5,8 @@ import {
   Typography,
   Grid,
   Paper,
-  LinearProgress,
   Stack,
+  Chip,
 } from '@mui/material';
 import {
   Code as CodeIcon,
@@ -15,23 +15,97 @@ import {
   Memory as AIIcon,
   VideogameAsset as GameDevIcon,
   Security as SecurityIcon,
+  Star as StarIcon,
+  StarBorder as StarBorderIcon,
 } from '@mui/icons-material';
+
+type SkillLevel = 'Expert' | 'Advanced' | 'Intermediate' | 'Beginner';
+type SkillColor = 'success' | 'info' | 'primary' | 'secondary';
 
 interface Skill {
   name: string;
-  proficiency: number;
+  level: SkillLevel;
   icon: React.ReactNode;
   category: string;
+  experience: string;
 }
 
+const getSkillColor = (level: SkillLevel): SkillColor => {
+  switch (level) {
+    case 'Expert':
+      return 'success';
+    case 'Advanced':
+      return 'info';
+    case 'Intermediate':
+      return 'primary';
+    case 'Beginner':
+      return 'secondary';
+  }
+};
+
+const getSkillStars = (level: SkillLevel) => {
+  switch (level) {
+    case 'Expert':
+      return [<StarIcon key="1" />, <StarIcon key="2" />, <StarIcon key="3" />, <StarIcon key="4" />, <StarIcon key="5" />];
+    case 'Advanced':
+      return [<StarIcon key="1" />, <StarIcon key="2" />, <StarIcon key="3" />, <StarIcon key="4" />, <StarBorderIcon key="5" />];
+    case 'Intermediate':
+      return [<StarIcon key="1" />, <StarIcon key="2" />, <StarIcon key="3" />, <StarBorderIcon key="4" />, <StarBorderIcon key="5" />];
+    case 'Beginner':
+      return [<StarIcon key="1" />, <StarIcon key="2" />, <StarBorderIcon key="3" />, <StarBorderIcon key="4" />, <StarBorderIcon key="5" />];
+  }
+};
+
 const skillsList: Skill[] = [
-  { name: 'Python', proficiency: 90, icon: <CodeIcon />, category: 'Programming' },
-  { name: 'Flutter', proficiency: 85, icon: <CodeIcon />, category: 'Mobile Development' },
-  { name: 'SQL', proficiency: 80, icon: <DatabaseIcon />, category: 'Database' },
-  { name: 'UI/UX Design', proficiency: 75, icon: <DesignIcon />, category: 'Design' },
-  { name: 'Machine Learning', proficiency: 85, icon: <AIIcon />, category: 'AI' },
-  { name: 'Game Development', proficiency: 70, icon: <GameDevIcon />, category: 'Game Dev' },
-  { name: 'Cybersecurity', proficiency: 80, icon: <SecurityIcon />, category: 'Security' },
+  { 
+    name: 'Python',
+    level: 'Expert',
+    icon: <CodeIcon />,
+    category: 'Programming',
+    experience: '3+ years'
+  },
+  { 
+    name: 'Flutter',
+    level: 'Advanced',
+    icon: <CodeIcon />,
+    category: 'Mobile Development',
+    experience: '2+ years'
+  },
+  { 
+    name: 'SQL',
+    level: 'Advanced',
+    icon: <DatabaseIcon />,
+    category: 'Database',
+    experience: '2+ years'
+  },
+  { 
+    name: 'UI/UX Design',
+    level: 'Intermediate',
+    icon: <DesignIcon />,
+    category: 'Design',
+    experience: '1+ year'
+  },
+  { 
+    name: 'Machine Learning',
+    level: 'Advanced',
+    icon: <AIIcon />,
+    category: 'AI',
+    experience: '2+ years'
+  },
+  { 
+    name: 'Game Development',
+    level: 'Intermediate',
+    icon: <GameDevIcon />,
+    category: 'Game Dev',
+    experience: '1+ year'
+  },
+  { 
+    name: 'Cybersecurity',
+    level: 'Advanced',
+    icon: <SecurityIcon />,
+    category: 'Security',
+    experience: '2+ years'
+  },
 ];
 
 const Skills: React.FC = () => (
@@ -47,9 +121,14 @@ const Skills: React.FC = () => (
               sx={{
                 p: 3,
                 height: '100%',
-                transition: 'transform 0.2s ease-in-out',
+                transition: 'all 0.3s ease-in-out',
                 '&:hover': {
                   transform: 'translateY(-4px)',
+                  boxShadow: (theme) => `0 8px 24px ${
+                    theme.palette.mode === 'dark' 
+                      ? 'rgba(255,255,255,0.1)' 
+                      : 'rgba(0,0,0,0.1)'
+                  }`,
                 },
               }}
               elevation={2}
@@ -74,32 +153,30 @@ const Skills: React.FC = () => (
                       {skill.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {skill.category}
+                      {skill.category} • {skill.experience}
                     </Typography>
                   </Box>
                 </Box>
-                <Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      Proficiency
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {skill.proficiency}%
-                    </Typography>
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={skill.proficiency}
-                    sx={{
-                      height: 6,
-                      borderRadius: 3,
-                      backgroundColor: 'grey.200',
-                      '& .MuiLinearProgress-bar': {
-                        borderRadius: 3,
-                      },
-                    }}
+                <Stack spacing={1}>
+                  <Chip
+                    label={skill.level}
+                    color={getSkillColor(skill.level)}
+                    size="small"
+                    sx={{ fontWeight: 500, alignSelf: 'flex-start' }}
                   />
-                </Box>
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      gap: 0.5,
+                      color: (theme) => 
+                        theme.palette.mode === 'dark' 
+                          ? theme.palette[getSkillColor(skill.level)].light
+                          : theme.palette[getSkillColor(skill.level)].main
+                    }}
+                  >
+                    {getSkillStars(skill.level)}
+                  </Box>
+                </Stack>
               </Stack>
             </Paper>
           </Grid>
