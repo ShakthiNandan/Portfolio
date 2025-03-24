@@ -74,7 +74,7 @@ const EmailSender: React.FC = () => {
     setIsSubmitting(true);
     try {
       // Create mailto link with pre-filled data
-      const mailtoLink = `mailto:nandankumar.2002@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+      const mailtoLink = `mailto:shakthinandanp0712@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       )}`;
       
