@@ -148,7 +148,7 @@ const EmailSender: React.FC = () => {
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Button
             component="a"
-            href="mailto:nandankumar.2002@gmail.com"
+            href="mailto:shakthinandanp0712@gmail.com"
             startIcon={<EmailIcon sx={{ color: 'inherit' }} />}
             variant="outlined"
             size="large"
