@@ -76,7 +76,7 @@ const BlenderShowcase: React.FC = () => {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prevIndex) => (prevIndex + 1) % blenderModels.length);
-    }, 5000);
+    }, 30000);
 
     return () => clearInterval(timer);
   }, [userInteracted]);
@@ -218,6 +218,7 @@ const BlenderShowcase: React.FC = () => {
               transform: 'translateY(-50%)',
               backgroundColor: 'rgba(0, 0, 0, 0.3)',
               color: 'white',
+              zIndex: 2,
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
               },
@@ -235,6 +236,7 @@ const BlenderShowcase: React.FC = () => {
               transform: 'translateY(-50%)',
               backgroundColor: 'rgba(0, 0, 0, 0.3)',
               color: 'white',
+              zIndex: 2,
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
               },

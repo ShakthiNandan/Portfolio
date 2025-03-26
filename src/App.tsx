@@ -20,6 +20,7 @@ import EmailSender from './components/EmailSender';
 import ProfessionalExperience from './components/ProfessionalExperience';
 import PositionsOfResponsibility from './components/PositionsOfResponsibility';
 import NavigationShortcuts from './components/NavigationShortcuts';
+import Awards from './components/Awards';
 
 const letterAnimation = {
   hidden: { opacity: 0, y: 50 },
@@ -178,6 +179,13 @@ const App: React.FC = () => {
                         gutterBottom
                       />
                       <BlenderShowcase />
+                    </Box>
+                  </motion.div>
+
+                  {/* Awards Section */}
+                  <motion.div variants={itemVariants}>
+                    <Box sx={{ my: 4 }}>
+                      <Awards />
                     </Box>
                   </motion.div>
 
