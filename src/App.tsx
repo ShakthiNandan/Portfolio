@@ -167,6 +167,11 @@ const App: React.FC = () => {
                     <Certifications />
                   </motion.div>
                   <motion.div variants={itemVariants}>
+                    <Box sx={{ my: 4 }}>
+                      <Awards />
+                    </Box>
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
                     <Patents />
                   </motion.div>
                   
@@ -182,12 +187,6 @@ const App: React.FC = () => {
                     </Box>
                   </motion.div>
 
-                  {/* Awards Section */}
-                  <motion.div variants={itemVariants}>
-                    <Box sx={{ my: 4 }}>
-                      <Awards />
-                    </Box>
-                  </motion.div>
 
                   {/* Games Section */}
                   <motion.div variants={itemVariants}>
