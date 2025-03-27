@@ -142,7 +142,7 @@ const HighlightProject: React.FC<HighlightProjectProps> = ({
                     <Button
                       variant="outlined"
                       startIcon={<VRIcon />}
-                      href="https://sssnandan.pythonanywhere.com/"
+                      href="https://shakthi.pythonanywhere.com/"
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{
