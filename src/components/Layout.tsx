@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Box, Container, IconButton, Tooltip } from "@mui/material";
-import { Analytics as AnalyticsIcon, Close as CloseIcon } from "@mui/icons-material";
+import React from "react";
+import { Box, Container, Paper } from "@mui/material";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import GoogleAnalyticsStats from "./GoogleAnalyticsStats";
+import TrafficStats from "./TrafficStats";
+import { ENABLE_ANALYTICS } from "../config";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,63 +12,56 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, toggleTheme }) => {
-  const [showAnalytics, setShowAnalytics] = useState(false);
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar toggleTheme={toggleTheme} />
       <Container maxWidth="lg" sx={{ minHeight: "80vh", mt: 8, position: 'relative' }}>
         {children}
-        
-        {/* Analytics Toggle Button */}
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: 20,
-            right: 20,
-            zIndex: 1000,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            gap: 2
+      </Container>
+      
+      {/* Analytics and Traffic Stats at Bottom */}
+      {ENABLE_ANALYTICS && (
+        <Box 
+          component="footer"
+          sx={{ 
+            width: '100%',
+            mt: 'auto',
+            borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+            background: (theme) => 
+              theme.palette.mode === 'dark' 
+                ? 'rgba(18, 18, 18, 0.98)' 
+                : 'rgba(255, 255, 255, 0.98)',
+            backdropFilter: 'blur(10px)',
           }}
         >
-          {showAnalytics && (
-            <Box
+          <Box 
+            sx={{
+              width: '100%',
+              maxWidth: '100vw',
+              mx: 'auto',
+              px: { xs: 2, sm: 3, md: 4 },
+              py: 3,
+            }}
+          >
+            <Box 
               sx={{
-                mb: 2,
-                boxShadow: 3,
-                borderRadius: 2,
-                overflow: 'hidden',
-                animation: 'fadeIn 0.3s ease-in-out',
-                '@keyframes fadeIn': {
-                  from: { opacity: 0, transform: 'translateY(20px)' },
-                  to: { opacity: 1, transform: 'translateY(0)' }
-                }
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 3,
+                maxWidth: '100%',
+                mx: 'auto',
               }}
             >
-              <GoogleAnalyticsStats />
+              <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
+                <GoogleAnalyticsStats />
+              </Box>
             </Box>
-          )}
-          
-          <Tooltip title={showAnalytics ? 'Hide Analytics' : 'Show Analytics'}>
-            <IconButton
-              onClick={() => setShowAnalytics(!showAnalytics)}
-              color="primary"
-              sx={{
-                backgroundColor: 'background.paper',
-                boxShadow: 3,
-                '&:hover': {
-                  backgroundColor: 'action.hover',
-                },
-                transition: 'all 0.3s ease',
-              }}
-            >
-              {showAnalytics ? <CloseIcon /> : <AnalyticsIcon />}
-            </IconButton>
-          </Tooltip>
+          </Box>
         </Box>
-      </Container>
+      )}
+      
       <Footer />
     </Box>
   );

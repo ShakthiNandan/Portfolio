@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, DarkMode, LightMode } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
-import TrafficStatsToggle from './TrafficStatsToggle';
 
 interface NavItem {
   text: string;
@@ -84,19 +83,19 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
         </motion.div>
       ))}
       <ListItem>
-        <IconButton onClick={toggleTheme} color="inherit">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={isDarkMode ? 'dark' : 'light'}
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {isDarkMode ? <DarkMode /> : <LightMode />}
-            </motion.div>
-          </AnimatePresence>
-        </IconButton>
+          <IconButton onClick={toggleTheme} color="inherit">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isDarkMode ? 'dark' : 'light'}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 20, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {isDarkMode ? <DarkMode /> : <LightMode />}
+              </motion.div>
+            </AnimatePresence>
+          </IconButton>
       </ListItem>
     </List>
   );
@@ -217,6 +216,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                     </Button>
                   </motion.div>
                 ))}
+
                 <Tooltip title={`Switch to ${isDarkMode ? 'Light' : 'Dark'} Mode`}>
                   <IconButton 
                     onClick={toggleTheme} 
@@ -241,7 +241,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
                     </AnimatePresence>
                   </IconButton>
                 </Tooltip>
-                <TrafficStatsToggle />
               </Box>
             </Box>
           )}
