@@ -83,19 +83,19 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
         </motion.div>
       ))}
       <ListItem>
-        <IconButton onClick={toggleTheme} color="inherit">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={isDarkMode ? 'dark' : 'light'}
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {isDarkMode ? <DarkMode /> : <LightMode />}
-            </motion.div>
-          </AnimatePresence>
-        </IconButton>
+          <IconButton onClick={toggleTheme} color="inherit">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isDarkMode ? 'dark' : 'light'}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 20, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {isDarkMode ? <DarkMode /> : <LightMode />}
+              </motion.div>
+            </AnimatePresence>
+          </IconButton>
       </ListItem>
     </List>
   );
@@ -166,79 +166,82 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme }) => {
             </Typography>
           </motion.div>
           {!isMobile && (
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              {menuItems.map((item) => (
-                <motion.div
-                  key={item.text}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ y: 0 }}
-                >
-                  <Button
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'flex-end' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {menuItems.map((item) => (
+                  <motion.div
+                    key={item.text}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ y: 0 }}
+                  >
+                    <Button
+                      color="primary"
+                      onClick={() => scrollToSection(item.sectionId)}
+                      sx={{
+                        position: 'relative',
+                        overflow: 'hidden',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          top: 0,
+                          left: -100,
+                          width: '100%',
+                          height: '100%',
+                          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+                          transition: 'transform 0.3s ease',
+                          transform: 'translateX(-100%)',
+                        },
+                        '&:hover::before': {
+                          transform: 'translateX(200%)',
+                        },
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '2px',
+                          background: 'linear-gradient(90deg, #1976d2, #9c27b0)',
+                          transform: 'scaleX(0)',
+                          transition: 'transform 0.3s ease',
+                          transformOrigin: 'right',
+                        },
+                        '&:hover::after': {
+                          transform: 'scaleX(1)',
+                          transformOrigin: 'left',
+                        },
+                      }}
+                    >
+                      {item.text}
+                    </Button>
+                  </motion.div>
+                ))}
+
+                <Tooltip title={`Switch to ${isDarkMode ? 'Light' : 'Dark'} Mode`}>
+                  <IconButton 
+                    onClick={toggleTheme} 
                     color="primary"
-                    onClick={() => scrollToSection(item.sectionId)}
                     sx={{
-                      position: 'relative',
-                      overflow: 'hidden',
-                      '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: -100,
-                        width: '100%',
-                        height: '100%',
-                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
-                        transition: 'transform 0.3s ease',
-                        transform: 'translateX(-100%)',
-                      },
-                      '&:hover::before': {
-                        transform: 'translateX(200%)',
-                      },
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '2px',
-                        background: 'linear-gradient(90deg, #1976d2, #9c27b0)',
-                        transform: 'scaleX(0)',
-                        transition: 'transform 0.3s ease',
-                        transformOrigin: 'right',
-                      },
-                      '&:hover::after': {
-                        transform: 'scaleX(1)',
-                        transformOrigin: 'left',
+                      transition: 'transform 0.3s ease',
+                      '&:hover': {
+                        transform: 'rotate(180deg)',
                       },
                     }}
                   >
-                    {item.text}
-                  </Button>
-                </motion.div>
-              ))}
-              <Tooltip title={`Switch to ${isDarkMode ? 'Light' : 'Dark'} Mode`}>
-                <IconButton 
-                  onClick={toggleTheme} 
-                  color="primary"
-                  sx={{
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      transform: 'rotate(180deg)',
-                    },
-                  }}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={isDarkMode ? 'dark' : 'light'}
-                      initial={{ rotate: -180, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 180, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {isDarkMode ? <DarkMode /> : <LightMode />}
-                    </motion.div>
-                  </AnimatePresence>
-                </IconButton>
-              </Tooltip>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={isDarkMode ? 'dark' : 'light'}
+                        initial={{ rotate: -180, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: 180, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {isDarkMode ? <DarkMode /> : <LightMode />}
+                      </motion.div>
+                    </AnimatePresence>
+                  </IconButton>
+                </Tooltip>
+              </Box>
             </Box>
           )}
         </Toolbar>

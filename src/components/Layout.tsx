@@ -12,9 +12,12 @@ const Layout: React.FC<LayoutProps> = ({ children, toggleTheme }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar toggleTheme={toggleTheme} />
-      <Container maxWidth="lg" sx={{ minHeight: "80vh", mt: 8 }}>
+      <Container maxWidth="lg" sx={{ minHeight: "80vh", mt: 8, position: 'relative' }}>
         {children}
       </Container>
+
+
+
       <Footer />
     </Box>
   );

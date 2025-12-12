@@ -77,16 +77,16 @@ const EmailSender: React.FC = () => {
       const mailtoLink = `mailto:shakthinandanp0712@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       )}`;
-      
+
       // Open default email client
       window.location.href = mailtoLink;
-      
+
       setSnackbar({
         open: true,
         message: 'Opening email client...',
         severity: 'success',
       });
-      
+
       setFormData({
         name: '',
         email: '',
@@ -135,7 +135,7 @@ const EmailSender: React.FC = () => {
               textTransform: 'uppercase',
               textAlign: { xs: 'center', sm: 'left' },
               color: 'text.primary',
-              textShadow: (theme) => 
+              textShadow: (theme) =>
                 theme.palette.mode === 'dark'
                   ? '0 0 20px rgba(255,255,255,0.3)'
                   : '0 0 20px rgba(0,0,0,0.1)',
@@ -148,7 +148,7 @@ const EmailSender: React.FC = () => {
         <Box sx={{ mb: 4, textAlign: 'center' }}>
           <Button
             component="a"
-            href="mailto:nandankumar.2002@gmail.com"
+            href="mailto:shakthinandanp0712@gmail.com"
             startIcon={<EmailIcon sx={{ color: 'inherit' }} />}
             variant="outlined"
             size="large"
@@ -165,7 +165,7 @@ const EmailSender: React.FC = () => {
               '&:hover': {
                 borderWidth: 2,
                 borderColor: 'primary.dark',
-                backgroundColor: (theme) => 
+                backgroundColor: (theme) =>
                   theme.palette.mode === 'dark'
                     ? 'rgba(255,255,255,0.05)'
                     : 'rgba(0,0,0,0.05)',
@@ -177,9 +177,9 @@ const EmailSender: React.FC = () => {
         </Box>
 
         <Divider sx={{ my: 4 }}>
-          <Typography 
-            variant="body2" 
-            sx={{ 
+          <Typography
+            variant="body2"
+            sx={{
               color: 'text.secondary',
               px: 2,
               backgroundColor: 'background.paper',
@@ -309,8 +309,8 @@ const EmailSender: React.FC = () => {
                 variant="contained"
                 size="large"
                 disabled={isSubmitting}
-                startIcon={isSubmitting ? 
-                  <CircularProgress size={20} sx={{ color: 'inherit' }} /> : 
+                startIcon={isSubmitting ?
+                  <CircularProgress size={20} sx={{ color: 'inherit' }} /> :
                   <SendIcon sx={{ color: 'inherit' }} />
                 }
                 sx={{
@@ -352,7 +352,7 @@ const EmailSender: React.FC = () => {
           <Alert
             onClose={handleCloseSnackbar}
             severity={snackbar.severity}
-            sx={{ 
+            sx={{
               width: '100%',
               '& .MuiAlert-icon': {
                 color: 'inherit',
