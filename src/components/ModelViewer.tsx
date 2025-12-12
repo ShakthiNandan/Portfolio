@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader, GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { Box, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 
 interface ModelViewerProps {
@@ -94,14 +94,14 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     const loader = new GLTFLoader();
     loader.load(
       modelPath,
-      (gltf) => {
+      (gltf: GLTF) => {
         if (modelRef.current) {
           scene.remove(modelRef.current);
         }
-        
+
         const model = gltf.scene;
         modelRef.current = model;
-        
+
         // Center and scale model
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
@@ -110,12 +110,12 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
         const scale = isMobile ? 1.8 / maxDim : 2 / maxDim; // Slightly smaller on mobile
         model.scale.setScalar(scale);
         model.position.sub(center.multiplyScalar(scale));
-        
+
         scene.add(model);
         setIsLoading(false);
       },
       undefined,
-      (error) => {
+      (error: unknown) => {
         console.error('Error loading model:', error);
         setIsLoading(false);
       }
@@ -125,12 +125,12 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     let previousTime = 0;
     const animate = (currentTime: number) => {
       frameIdRef.current = requestAnimationFrame(animate);
-      
+
       // Limit to 60fps on mobile
       if (isMobile && (currentTime - previousTime) < (1000 / 60)) {
         return;
       }
-      
+
       previousTime = currentTime;
       controls.update();
       renderer.render(scene, camera);
@@ -141,7 +141,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
     let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
       if (resizeTimeout) clearTimeout(resizeTimeout);
-      
+
       resizeTimeout = setTimeout(() => {
         if (!containerRef.current || !camera || !renderer) return;
 
@@ -162,12 +162,12 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
       if (resizeTimeout) clearTimeout(resizeTimeout);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(frameIdRef.current);
-      
+
       if (rendererRef.current) {
         rendererRef.current.dispose();
         rendererRef.current.domElement.remove();
       }
-      
+
       if (modelRef.current) {
         modelRef.current.traverse((child) => {
           if (child instanceof THREE.Mesh) {
@@ -209,7 +209,7 @@ const ModelViewer: React.FC<ModelViewerProps> = ({
             zIndex: 1,
           }}
         >
-          <CircularProgress 
+          <CircularProgress
             color="primary"
             size={isMobile ? 40 : 48} // Smaller loading indicator on mobile
           />

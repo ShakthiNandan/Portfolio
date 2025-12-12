@@ -9,7 +9,6 @@ import {
   useTheme,
 } from '@mui/material';
 import {
-  Code as CodeIcon,
   Storage as DatabaseIcon,
   Web as WebIcon,
   Memory as AIIcon,

@@ -1,14 +1,6 @@
 import React from "react";
 import { Box, Typography, useTheme, useMediaQuery, Paper } from "@mui/material";
-import {
-  Timeline as MuiTimeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineOppositeContent
-} from "@mui/lab";
+
 import { motion } from "framer-motion";
 import {
   Code as CodeIcon,
@@ -110,7 +102,7 @@ const experiences: Experience[] = [
 const ProfessionalExperience: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
 
   return (
     <Box
@@ -152,38 +144,169 @@ const ProfessionalExperience: React.FC = () => {
         </Typography>
       </motion.div>
 
-      <MuiTimeline
-        position={isMobile ? "right" : "alternate"}
-        sx={{
-          p: { xs: 0, sm: 1, md: 2 },
-          [`& .MuiTimelineItem-root`]: {
-            minHeight: { xs: '60px', sm: '80px', md: '100px' },
-            '&::before': {
-              ...(isMobile && {
-                display: 'none',
-              }),
-            },
-          },
-          [`& .MuiTimelineContent-root`]: {
-            px: { xs: 2, sm: 2, md: 3 },
-            py: { xs: 1, sm: 1.5, md: 2 },
-          },
-          [`& .MuiTimelineDot-root`]: {
-            margin: { xs: 1, sm: 1.5, md: 2 },
-            padding: { xs: 1, sm: 1.5, md: 2 },
-          },
-          [`& .MuiTimelineConnector-root`]: {
-            width: { xs: 1, sm: 2, md: 3 },
-          },
-          [`& .MuiTimelineOppositeContent-root`]: {
-            display: { xs: 'none', sm: 'block' },
-          },
-        }}
-      >
-        {experiences.map((exp, index) => (
-          <TimelineItem key={index}>
-            {!isMobile && (
-              <TimelineOppositeContent>
+      <Box sx={{ position: 'relative', width: '100%', py: 2 }}>
+        {/* Vertical Line */}
+        <Box
+          sx={{
+            position: 'absolute',
+            left: { xs: '20px', sm: '50%' },
+            top: 0,
+            bottom: 0,
+            width: '2px',
+            bgcolor: theme.palette.primary.main,
+            opacity: 0.3,
+            transform: { xs: 'none', sm: 'translateX(-50%)' },
+            zIndex: 0,
+          }}
+        />
+
+        {experiences.map((exp, index) => {
+          const isLeft = index % 2 === 0;
+          return (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                mb: 4,
+                width: '100%',
+                flexDirection: { xs: 'row', sm: isLeft ? 'row-reverse' : 'row' },
+                alignItems: 'center',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {/* Content Side */}
+              <Box
+                sx={{
+                  width: { xs: 'calc(100% - 60px)', sm: '50%' },
+                  pl: { xs: 2, sm: isLeft ? 0 : 4 },
+                  pr: { xs: 0, sm: isLeft ? 4 : 0 },
+                  ml: { xs: '60px', sm: 0 },
+                  textAlign: { xs: 'left', sm: isLeft ? 'right' : 'left' },
+                }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{
+                    duration: 0.4,
+                    delay: index * 0.1,
+                    ease: "easeOut"
+                  }}
+                >
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: { xs: 1.5, sm: 2, md: 2.5 },
+                      backgroundColor: theme.palette.background.paper,
+                      borderRadius: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: theme.shadows[4],
+                      },
+                    }}
+                  >
+                    {isMobile && (
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                          fontWeight: 600,
+                          color: theme.palette.primary.main,
+                          mb: 0.5,
+                        }}
+                      >
+                        {exp.period}
+                      </Typography>
+                    )}
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+                        fontWeight: 500,
+                        color: theme.palette.text.primary,
+                        mb: 0.5,
+                      }}
+                    >
+                      {exp.title}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                        color: theme.palette.text.secondary,
+                        mb: 1,
+                      }}
+                    >
+                      {exp.company} | {exp.location}
+                    </Typography>
+                    <Box
+                      component="ul"
+                      sx={{
+                        pl: 2,
+                        m: 0,
+                        listStyleType: 'disc',
+                        textAlign: 'left', // Keep list items left aligned even if container is right aligned
+                        display: 'inline-block', // To contain the list width
+                        maxWidth: '100%',
+                      }}
+                    >
+                      {exp.description.map((item, i) => (
+                        <Typography
+                          key={i}
+                          component="li"
+                          variant="body2"
+                          sx={{
+                            fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.9rem' },
+                            color: theme.palette.text.secondary,
+                            mb: 0.5,
+                            '&:last-child': {
+                              mb: 0,
+                            },
+                          }}
+                        >
+                          {item}
+                        </Typography>
+                      ))}
+                    </Box>
+                  </Paper>
+                </motion.div>
+              </Box>
+
+              {/* Dot */}
+              <Box
+                component={motion.div}
+                whileHover={{ scale: 1.2 }}
+                sx={{
+                  position: 'absolute',
+                  left: { xs: '20px', sm: '50%' },
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  bgcolor: theme.palette.primary.main,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: { xs: 'translateX(-50%)', sm: 'translateX(-50%)' },
+                  zIndex: 2,
+                  boxShadow: theme.shadows[3],
+                  color: '#fff',
+                }}
+              >
+                {React.cloneElement(exp.icon as React.ReactElement<any>, { fontSize: 'small' })}
+              </Box>
+
+              {/* Date Side */}
+              <Box
+                sx={{
+                  width: '50%',
+                  px: 4,
+                  display: { xs: 'none', sm: 'block' },
+                  textAlign: isLeft ? 'left' : 'right',
+                }}
+              >
                 <Typography
                   variant="h6"
                   sx={{
@@ -194,126 +317,11 @@ const ProfessionalExperience: React.FC = () => {
                 >
                   {exp.period}
                 </Typography>
-              </TimelineOppositeContent>
-            )}
-            <TimelineSeparator>
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <TimelineDot
-                  sx={{
-                    bgcolor: theme.palette.primary.main,
-                    boxShadow: theme.shadows[3],
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      bgcolor: theme.palette.primary.dark,
-                      boxShadow: theme.shadows[5],
-                    },
-                  }}
-                >
-                  {exp.icon}
-                </TimelineDot>
-              </motion.div>
-              {index < experiences.length - 1 && (
-                <TimelineConnector
-                  sx={{
-                    bgcolor: theme.palette.primary.main,
-                    opacity: 0.3,
-                  }}
-                />
-              )}
-            </TimelineSeparator>
-            <TimelineContent>
-              <motion.div
-                initial={{ opacity: 0, x: isMobile ? 20 : isTablet ? 30 : 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{
-                  duration: 0.4,
-                  delay: isMobile ? index * 0.1 : index * 0.15,
-                  ease: "easeOut"
-                }}
-              >
-                <Paper
-                  elevation={2}
-                  sx={{
-                    p: { xs: 1.5, sm: 2, md: 2.5 },
-                    backgroundColor: theme.palette.background.paper,
-                    borderRadius: 2,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      boxShadow: theme.shadows[4],
-                    },
-                  }}
-                >
-                  {isMobile && (
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        fontSize: { xs: '0.85rem', sm: '0.9rem' },
-                        fontWeight: 600,
-                        color: theme.palette.primary.main,
-                        mb: 0.5,
-                      }}
-                    >
-                      {exp.period}
-                    </Typography>
-                  )}
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
-                      fontWeight: 500,
-                      color: theme.palette.text.primary,
-                      mb: 0.5,
-                    }}
-                  >
-                    {exp.title}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
-                      color: theme.palette.text.secondary,
-                      mb: 1,
-                    }}
-                  >
-                    {exp.company} | {exp.location}
-                  </Typography>
-                  <Box
-                    component="ul"
-                    sx={{
-                      pl: 2,
-                      m: 0,
-                      listStyleType: 'disc',
-                    }}
-                  >
-                    {exp.description.map((item, i) => (
-                      <Typography
-                        key={i}
-                        component="li"
-                        variant="body2"
-                        sx={{
-                          fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.9rem' },
-                          color: theme.palette.text.secondary,
-                          mb: 0.5,
-                          '&:last-child': {
-                            mb: 0,
-                          },
-                        }}
-                      >
-                        {item}
-                      </Typography>
-                    ))}
-                  </Box>
-                </Paper>
-              </motion.div>
-            </TimelineContent>
-          </TimelineItem>
-        ))}
-      </MuiTimeline>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
     </Box>
   );
 };

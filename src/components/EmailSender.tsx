@@ -8,10 +8,7 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
-  useTheme,
-  useMediaQuery,
   Container,
-  Link,
   Divider,
 } from '@mui/material';
 import { motion } from 'framer-motion';
@@ -27,8 +24,6 @@ interface EmailFormData {
 }
 
 const EmailSender: React.FC = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [formData, setFormData] = useState<EmailFormData>({
     name: '',
     email: '',

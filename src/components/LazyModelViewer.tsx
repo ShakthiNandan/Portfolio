@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, IconButton, Typography, useTheme, Fade, Tooltip } from '@mui/material';
 import { motion } from 'framer-motion';
-import { 
+import {
   ThreeDRotation as ThreeDIcon,
   Fullscreen as FullscreenIcon,
   FullscreenExit as FullscreenExitIcon,
@@ -20,8 +20,6 @@ interface LazyModelViewerProps {
 const LazyModelViewer: React.FC<LazyModelViewerProps> = ({
   previewImageUrl,
   modelUrl,
-  title,
-  description,
 }) => {
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -66,11 +64,11 @@ const LazyModelViewer: React.FC<LazyModelViewerProps> = ({
   }, [isModelLoaded]);
 
   return (
-    <Box 
+    <Box
       ref={containerRef}
-      sx={{ 
-        position: 'relative', 
-        width: '100%', 
+      sx={{
+        position: 'relative',
+        width: '100%',
         height: '100%',
         ...(isFullscreen && {
           position: 'fixed',

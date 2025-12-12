@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { ThemeProvider, CssBaseline, Container, Typography, Box, useMediaQuery } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brightness4, Brightness7 } from '@mui/icons-material';
 import AboutMe from './components/AboutMe';
 import Timeline from './components/Timeline';
 import Projects from './components/Projects';
@@ -30,7 +29,7 @@ const letterAnimation = {
     transition: {
       delay: i * 0.1,
       duration: 0.5,
-      ease: [0.2, 0.65, 0.3, 0.9],
+      ease: [0.2, 0.65, 0.3, 0.9] as [number, number, number, number],
     },
   }),
 };

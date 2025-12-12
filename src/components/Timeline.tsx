@@ -1,14 +1,6 @@
 import React from 'react';
 import { Box, Container, Typography, Paper, useTheme, useMediaQuery } from '@mui/material';
-import {
-  Timeline as MuiTimeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineOppositeContent,
-} from '@mui/lab';
+
 import { motion } from 'framer-motion';
 import {
   Code as CodeIcon,
@@ -21,8 +13,7 @@ import {
   Brush as BrushIcon,
 } from '@mui/icons-material';
 
-const MotionPaper = motion(Paper);
-const MotionTimelineDot = motion(TimelineDot);
+
 
 interface TimelineEvent {
   year: string;
@@ -109,13 +100,13 @@ const events: TimelineEvent[] = [
 const Timeline: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
 
   return (
-    <Box 
-      component="section" 
-      id="timeline" 
-      sx={{ 
+    <Box
+      component="section"
+      id="timeline"
+      sx={{
         py: { xs: 3, sm: 4, md: 6 },
         px: { xs: 0, sm: 1, md: 2 },
         backgroundColor: theme.palette.background.default,
@@ -135,14 +126,14 @@ const Timeline: React.FC = () => {
               fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' },
               fontFamily: 'Roboto',
               fontWeight: 700,
-              background: (theme) => 
+              background: (theme) =>
                 theme.palette.mode === 'dark'
                   ? 'linear-gradient(45deg, #fff 30%, #888 90%)'
                   : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
-              textShadow: (theme) => 
+              textShadow: (theme) =>
                 theme.palette.mode === 'dark'
                   ? '0 0 20px rgba(255,255,255,0.3)'
                   : '0 0 20px rgba(33,150,243,0.3)',
@@ -151,39 +142,140 @@ const Timeline: React.FC = () => {
             Skill Development
           </Typography>
         </motion.div>
-        <MuiTimeline 
-          position={isMobile ? "right" : "alternate"}
-          sx={{
-            p: { xs: 0, sm: 1, md: 2 },
-            [`& .MuiTimelineItem-root`]: {
-              minHeight: { xs: '60px', sm: '80px', md: '100px' },
-              '&::before': {
-                // This removes the padding on mobile that causes misalignment
-                ...(isMobile && {
-                  display: 'none',
-                }),
-              },
-            },
-            [`& .MuiTimelineContent-root`]: {
-              px: { xs: 2, sm: 2, md: 3 },
-              py: { xs: 1, sm: 1.5, md: 2 },
-            },
-            [`& .MuiTimelineDot-root`]: {
-              margin: { xs: 1, sm: 1.5, md: 2 },
-              padding: { xs: 1, sm: 1.5, md: 2 },
-            },
-            [`& .MuiTimelineConnector-root`]: {
-              width: { xs: 1, sm: 2, md: 3 },
-            },
-            [`& .MuiTimelineOppositeContent-root`]: {
-              display: { xs: 'none', sm: 'block' },
-            },
-          }}
-        >
-          {events.map((event, index) => (
-            <TimelineItem key={event.year}>
-              {!isMobile && (
-                <TimelineOppositeContent>
+
+        <Box sx={{ position: 'relative', width: '100%', py: 2 }}>
+          {/* Vertical Line */}
+          <Box
+            sx={{
+              position: 'absolute',
+              left: { xs: '20px', sm: '50%' },
+              top: 0,
+              bottom: 0,
+              width: '2px',
+              bgcolor: theme.palette.primary.main,
+              opacity: 0.3,
+              transform: { xs: 'none', sm: 'translateX(-50%)' },
+              zIndex: 0,
+            }}
+          />
+
+          {events.map((event, index) => {
+            const isLeft = index % 2 === 0;
+            return (
+              <Box
+                key={event.year}
+                sx={{
+                  display: 'flex',
+                  mb: 4,
+                  width: '100%',
+                  flexDirection: { xs: 'row', sm: isLeft ? 'row-reverse' : 'row' },
+                  alignItems: 'center',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+              >
+                {/* Content Side (Right on mobile, Left/Right on desktop) */}
+                <Box
+                  sx={{
+                    width: { xs: 'calc(100% - 60px)', sm: '50%' },
+                    pl: { xs: 2, sm: isLeft ? 0 : 4 },
+                    pr: { xs: 0, sm: isLeft ? 4 : 0 },
+                    ml: { xs: '60px', sm: 0 },
+                    textAlign: { xs: 'left', sm: isLeft ? 'right' : 'left' },
+                  }}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{
+                      duration: 0.4,
+                      delay: index * 0.1,
+                      ease: "easeOut"
+                    }}
+                  >
+                    <Paper
+                      elevation={2}
+                      sx={{
+                        p: { xs: 1.5, sm: 2, md: 2.5 },
+                        backgroundColor: theme.palette.background.paper,
+                        borderRadius: 2,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          boxShadow: theme.shadows[4],
+                        },
+                      }}
+                    >
+                      {isMobile && (
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                            fontWeight: 600,
+                            color: theme.palette.primary.main,
+                            mb: 0.5,
+                          }}
+                        >
+                          {event.year}
+                        </Typography>
+                      )}
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+                          fontWeight: 500,
+                          color: theme.palette.text.primary,
+                          mb: 0.5,
+                        }}
+                      >
+                        {event.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                          color: theme.palette.text.secondary,
+                        }}
+                      >
+                        {event.description}
+                      </Typography>
+                    </Paper>
+                  </motion.div>
+                </Box>
+
+                {/* Dot */}
+                <Box
+                  component={motion.div}
+                  whileHover={{ scale: 1.2 }}
+                  sx={{
+                    position: 'absolute',
+                    left: { xs: '20px', sm: '50%' },
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    bgcolor: theme.palette.primary.main,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transform: { xs: 'translateX(-50%)', sm: 'translateX(-50%)' },
+                    zIndex: 2,
+                    boxShadow: theme.shadows[3],
+                    color: '#fff',
+                  }}
+                >
+                  {React.cloneElement(event.icon as React.ReactElement<any>, { fontSize: 'small' })}
+                </Box>
+
+                {/* Date Side (Hidden on mobile, Opposite on desktop) */}
+                <Box
+                  sx={{
+                    width: '50%',
+                    px: 4,
+                    display: { xs: 'none', sm: 'block' },
+                    textAlign: isLeft ? 'left' : 'right',
+                  }}
+                >
                   <Typography
                     variant="h6"
                     sx={{
@@ -194,99 +286,11 @@ const Timeline: React.FC = () => {
                   >
                     {event.year}
                   </Typography>
-                </TimelineOppositeContent>
-              )}
-              <TimelineSeparator>
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <TimelineDot
-                    sx={{
-                      bgcolor: theme.palette.primary.main,
-                      boxShadow: theme.shadows[3],
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        bgcolor: theme.palette.primary.dark,
-                        boxShadow: theme.shadows[5],
-                      },
-                    }}
-                  >
-                    {event.icon}
-                  </TimelineDot>
-                </motion.div>
-                {index < events.length - 1 && (
-                  <TimelineConnector 
-                    sx={{
-                      bgcolor: theme.palette.primary.main,
-                      opacity: 0.3,
-                    }}
-                  />
-                )}
-              </TimelineSeparator>
-              <TimelineContent>
-                <motion.div
-                  initial={{ opacity: 0, x: isMobile ? 20 : isTablet ? 30 : 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ 
-                    duration: 0.4,
-                    delay: isMobile ? index * 0.1 : index * 0.15,
-                    ease: "easeOut"
-                  }}
-                >
-                  <Paper
-                    elevation={2}
-                    sx={{
-                      p: { xs: 1.5, sm: 2, md: 2.5 },
-                      backgroundColor: theme.palette.background.paper,
-                      borderRadius: 2,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: theme.shadows[4],
-                      },
-                    }}
-                  >
-                    {isMobile && (
-                      <Typography
-                        variant="subtitle1"
-                        sx={{
-                          fontSize: { xs: '0.85rem', sm: '0.9rem' },
-                          fontWeight: 600,
-                          color: theme.palette.primary.main,
-                          mb: 0.5,
-                        }}
-                      >
-                        {event.year}
-                      </Typography>
-                    )}
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
-                        fontWeight: 500,
-                        color: theme.palette.text.primary,
-                        mb: 0.5,
-                      }}
-                    >
-                      {event.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
-                        color: theme.palette.text.secondary,
-                      }}
-                    >
-                      {event.description}
-                    </Typography>
-                  </Paper>
-                </motion.div>
-              </TimelineContent>
-            </TimelineItem>
-          ))}
-        </MuiTimeline>
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
       </Container>
     </Box>
   );

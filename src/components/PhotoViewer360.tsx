@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Box, CircularProgress } from '@mui/material';
 
 interface PhotoViewer360Props {
@@ -102,7 +102,7 @@ const PhotoViewer360: React.FC<PhotoViewer360Props> = ({
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(frameIdRef.current);
-      
+
       if (rendererRef.current) {
         rendererRef.current.dispose();
         rendererRef.current.domElement.remove();
