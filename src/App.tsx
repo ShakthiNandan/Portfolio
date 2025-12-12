@@ -49,14 +49,14 @@ const AnimatedTitle: React.FC<{ text: string; variant: "h2" | "h3"; component?: 
         gutterBottom={gutterBottom}
         align={align}
         sx={{
-          background: (theme) => 
+          background: (theme) =>
             theme.palette.mode === 'dark'
               ? 'linear-gradient(45deg, #fff 30%, #888 90%)'
               : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           color: 'transparent',
-          textShadow: (theme) => 
+          textShadow: (theme) =>
             theme.palette.mode === 'dark'
               ? '0 0 20px rgba(255,255,255,0.3)'
               : '0 0 20px rgba(33,150,243,0.3)',
@@ -168,7 +168,7 @@ const App: React.FC = () => {
                   <motion.div variants={itemVariants}>
                     <Patents />
                   </motion.div>
-                  
+
                   {/* 3D Models Section */}
                   <motion.div variants={itemVariants}>
                     <Box sx={{ my: 4 }}>
@@ -196,14 +196,39 @@ const App: React.FC = () => {
                   <motion.div variants={itemVariants}>
                     <Box sx={{ my: 4 }}>
                       <AnimatedTitle
+                        text="Freelance Projects"
+                        variant="h3"
+                        gutterBottom
+                      />
+                      <HighlightProject
+                        title="Icon Embeded Controls"
+                        subtitle="Industrial Equipment Website"
+                        description="A modern, responsive website showcasing industrial equipment and machinery manufactured by Icon Embeded Controls. Built with Next.js 14, React 19, and Tailwind CSS 4. Features a clean, professional design, advanced product search, and SEO optimization."
+                        imageUrl="/images/icon_site_thumb.png"
+                        technologies={["Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4", "Framer Motion", "Nodemailer"]}
+                        features={["Responsive Design", "Modern UI/UX", "Product Search", "Contact Forms", "SEO Optimized"]}
+                        liveLink="https://www.iconembededcontrols.com"
+                      />
+                    </Box>
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Box sx={{ my: 4 }}>
+                      <AnimatedTitle
                         text="Highlight Project"
                         variant="h3"
                         gutterBottom
                       />
-                      <HighlightProject 
+                      <HighlightProject
                         title="360° VR College Tour"
-                        description="An Immersive Virtual Reality Experience"
+                        subtitle="An Immersive Virtual Reality Experience"
+                        description="Experience a cutting-edge virtual reality tour of the college campus. This project combines 360° photography with web-based VR technology to create an interactive and immersive exploration experience."
                         imageUrl="/images/VR.png"
+                        technologies={["HTML5", "Python", "Flask", "VR Technology", "Three.js", "React"]}
+                        features={["Immersive 360° Views", "Complete Campus Coverage", "Web-Based VR Technology"]}
+                        githubLink="https://github.com/ShakthiNandan/360-VR-College"
+                        liveLink="https://shakthi.pythonanywhere.com/"
+                        reverse
                       />
                     </Box>
                   </motion.div>

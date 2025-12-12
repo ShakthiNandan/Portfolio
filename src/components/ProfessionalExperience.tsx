@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Typography, useTheme, useMediaQuery, Paper } from "@mui/material";
-import { 
-  Timeline as MuiTimeline, 
-  TimelineItem, 
-  TimelineSeparator, 
-  TimelineConnector, 
-  TimelineContent, 
+import {
+  Timeline as MuiTimeline,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineConnector,
+  TimelineContent,
   TimelineDot,
   TimelineOppositeContent
 } from "@mui/lab";
@@ -15,6 +15,8 @@ import {
   PhoneAndroid as PhoneIcon,
   Web as WebIcon,
   Cloud as CloudIcon,
+  BugReport as BugReportIcon,
+  Layers as FullStackIcon,
 } from "@mui/icons-material";
 
 interface Experience {
@@ -27,6 +29,27 @@ interface Experience {
 }
 
 const experiences: Experience[] = [
+  {
+    title: "Full Stack Developer",
+    company: "Icon Embeded Controls",
+    location: "Coimbatore",
+    period: "11/2025 - 12/2025",
+    description: [
+      "Web Development & Hosting",
+      "React Next.js"
+    ],
+    icon: <FullStackIcon />
+  },
+  {
+    title: "Software Tester",
+    company: "Akamai Technologies",
+    location: "Bangalore",
+    period: "06/2025",
+    description: [
+      "UI Testing & Automation - Python Playwright, Jenkins"
+    ],
+    icon: <BugReportIcon />
+  },
   {
     title: "Software Developer",
     company: "Lofty Agrotech",
@@ -112,14 +135,14 @@ const ProfessionalExperience: React.FC = () => {
             fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' },
             fontFamily: 'Roboto',
             fontWeight: 700,
-            background: (theme) => 
+            background: (theme) =>
               theme.palette.mode === 'dark'
                 ? 'linear-gradient(45deg, #fff 30%, #888 90%)'
                 : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
             color: 'transparent',
-            textShadow: (theme) => 
+            textShadow: (theme) =>
               theme.palette.mode === 'dark'
                 ? '0 0 20px rgba(255,255,255,0.3)'
                 : '0 0 20px rgba(33,150,243,0.3)',
@@ -129,7 +152,7 @@ const ProfessionalExperience: React.FC = () => {
         </Typography>
       </motion.div>
 
-      <MuiTimeline 
+      <MuiTimeline
         position={isMobile ? "right" : "alternate"}
         sx={{
           p: { xs: 0, sm: 1, md: 2 },
@@ -193,7 +216,7 @@ const ProfessionalExperience: React.FC = () => {
                 </TimelineDot>
               </motion.div>
               {index < experiences.length - 1 && (
-                <TimelineConnector 
+                <TimelineConnector
                   sx={{
                     bgcolor: theme.palette.primary.main,
                     opacity: 0.3,
@@ -206,7 +229,7 @@ const ProfessionalExperience: React.FC = () => {
                 initial={{ opacity: 0, x: isMobile ? 20 : isTablet ? 30 : 40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ 
+                transition={{
                   duration: 0.4,
                   delay: isMobile ? index * 0.1 : index * 0.15,
                   ease: "easeOut"
@@ -259,9 +282,9 @@ const ProfessionalExperience: React.FC = () => {
                   >
                     {exp.company} | {exp.location}
                   </Typography>
-                  <Box 
-                    component="ul" 
-                    sx={{ 
+                  <Box
+                    component="ul"
+                    sx={{
                       pl: 2,
                       m: 0,
                       listStyleType: 'disc',

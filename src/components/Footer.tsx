@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
               <Email />
             </IconButton>
             <IconButton
-              href="https://sssnandan.pythonanywhere.com/"
+              href="https://shakthi.pythonanywhere.com/"
               target="_blank"
               rel="noopener noreferrer"
               color="inherit"
